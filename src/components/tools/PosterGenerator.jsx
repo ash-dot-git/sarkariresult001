@@ -3,9 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import html2canvas from "html2canvas";
 import { motion, AnimatePresence } from "framer-motion";
-import Template1 from "./templates/Template1";
-import Template2 from "./templates/Template2";
-import Template3 from "./templates/Template3";
+import Template1 from "./templates/template1";
+import Template2 from "./templates/template2";
+import Template3 from "./templates/template3";
 
 
 export default function PosterGenerator({ postId, titleSlug }) {
