@@ -1,0 +1,37 @@
+﻿details schema
+* name_of_post: text input field
+* description_of_post: text input field
+* name_of_organisation: text input field
+* post_date:default current time and date
+* important_dates:array of  objects multiple input fields add button for more
+   * application_start_date: date if not given assign null
+   * application_last_date: date
+   * fee_payment_last_date: date
+   * correction_last_date: date if not given assign null
+   * admit_card_release_date: date if not given assign null
+   * exam_date: date if not given assign null
+   * answer_key_release_date: date if not given assign null
+   * result_date: date if not given assign null
+* application_fee:array of objects multiple input fields add button for more
+   * ur_ews_obc: key: ‘ur/ews/obc’:amount
+   * sc_st_ph:key ‘sc/st/ph’ :amount
+   * all_category_female: ‘all category female’ :amount
+   * ur_ews: key: ‘ur/ews’:amount
+   * obc_sc_st:key ‘obc/sc/st’ :amount
+   * ph:key ‘ph’ :amount
+* mode_of_payment: text input with default value
+* age_limit: type object
+   * as_on:type date
+   * min_age: text input field
+   * max_age: array of values add button for more
+   * remarks: text input fields
+* vacancy_details:type array of objects {post_name, no_of_post, category_wise_post, eligibility_criteria, physical_requirement}
+   * post_name: text input
+   * no_of_post: text input but number only
+   * category_wise_post: array of objects {category_name:count text input number only}
+   * eligibility_criteria: array of values add button for more
+   * physical_requirement: array of objects add button for more {key: ‘value can be array of objects’}
+* documents_required:array of objects add button for more
+   * personal_details: array of values add button for more
+* mode_of_selection: array of values add button for more
+* important_links: array of objects {key: ‘value as link’} add button for more

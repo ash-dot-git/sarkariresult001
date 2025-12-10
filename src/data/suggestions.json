@@ -1,0 +1,293 @@
+{
+  "sections": [
+    { "title": "Meta Details",
+      "description": "This section contains meta details about the job post, including title, description,",
+      "name": "meta_details",
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title",
+          "placeholder": "Enter title"
+        },
+        {
+          "name": "name_of_post",
+          "type": "text",
+          "label": "Name of Post",
+          "placeholder": "Enter name of post"
+        },
+        { "name": "post_date", "type": "text", "label": "Post Date" },
+        {
+          "name": "description",
+          "type": "textarea",
+          "label": "Description",
+          "placeholder": "Enter description"
+        },
+        {
+          "name": "image_url",
+          "type": "text",
+          "label": "Image URL",
+          "placeholder": "Enter image URL"
+        },
+        {
+          "name": "name_of_organisation",
+          "type": "text",
+          "label": "Name of Organisation",
+          "placeholder": "Enter name of organisation"
+        },
+        { "name": "update_date", "type": "text", "label": "Update Date" },
+        {
+          "name": "keywords",
+          "type": "text",
+          "label": "Keywords",
+          "placeholder": "Enter keywords (comma separated for SEO optimization)"
+        },
+        {
+          "name": "short_description",
+          "type": "textarea",
+          "label": "Short Description",
+          "placeholder": "Enter Short Description for SEO optimization"
+        },
+        {
+          "name": "display_title",
+          "type": "textarea",
+          "label": "Display Title",
+          "placeholder": "Enter Title to Display in Important Box"
+        }
+      ]
+    },
+    { "title": "Important Dates",
+      "description":"This section contains meta details about the job post, including title, description", "name":"important_dates",
+      "fields": [
+        { "name": "start_date", "type": "text", "label": "Application Start Date" },
+        { "name": "last_date", "type": "text", "label": "Last Date", "value": "{red}****{/red}" },
+        { "name": "online_fee_last_date", "type": "text", "label": "Online Fee Payment Last Date" },
+        { "name": "correction_date_window", "type": "text", "label": "Correction Date" },
+        { "name": "admit_card_date", "type": "text", "label": "Admit Card Date" },
+        { "name": "exam_date", "type": "text", "label": "Exam Date" },
+        { "name": "result_date", "type": "text", "label": "Result Date" }
+      ]
+    },
+    { "title": "Application Fee",
+      "name": "application_fee",
+      "description": "Fee details by category",
+      "fields": [
+        {
+          "name": "ur_ews_obc",
+          "type": "text",
+          "label": "UR/EWS/OBC"
+        },
+        {
+          "name": "sc_st_ph",
+          "type": "text",
+          "label": "SC/ST/PH"
+        },
+        {
+          "name": "female_all_category",
+          "type": "text",
+          "label": "Female All Category"
+        },
+        {
+          "name": "ur_ews",
+          "type": "text",
+          "label": "UR/EWS"
+        },
+        {
+          "name": "obc_sc_st_ph",
+          "type": "text",
+          "label": "OBC/SC/ST/PH"
+        },
+        {
+          "name": "correction_fee",
+          "type": "text",
+          "label": "Correction Fee"
+        },
+        {
+          "name": "mode_of_payment",
+          "type": "textarea",
+          "label": "Mode of Payment",
+          "value": "You can make the payment using following methods:\n - Debit Card\n - Credit Card\n- Internet Banking\n- IMPS"
+        }
+      ]
+    },
+    { "title": "Age Limit",
+      "name": "age_limit",  
+      "description": "This section contains the age limit for the job post",
+      "fields": [
+        {
+          "name": "age_as_on",
+          "type": "text",
+          "label": "As On",
+          "placeholder": "Enter as on Date",
+          "value": "{red}****{/red}"
+        },
+        {
+          "name": "min_age",
+          "type": "text",
+          "label": "Minimum Age",
+          "placeholder": "Enter minimum age limit",
+          "value": "18 Years"
+        },
+        {
+          "name": "max_age",
+          "type": "text",
+          "label": "Maximum Age",
+          "placeholder": "Enter max age"
+        },
+        {
+          "name": "age_relaxation",
+          "type": "text",
+          "label": "Age Relaxation",
+          "placeholder": "Enter age relaxation details"
+        }
+      ]
+    },
+    { "title": "Eligibility Criteria",
+      "name": "eligibility_criteria",
+      "description": "This section contains the eligibility criteria for the job post, including age limit",
+      "fields": [
+        {
+          "name": "education_qualification",
+          "type": "table",
+          "label": "Education Qualification",
+          "placeholder": "Enter education qualification"
+        },
+        {
+          "name": "physical",
+          "type": "table",
+          "label": "Physical",
+          "placeholder": "Enter physical requirements"
+        }
+      ]
+    },
+    { "title": "Vacancy Details",
+      "name": "vacancy_details",
+      "description": "Structured vacancy details in tabular format",
+      "fields": [
+        {
+          "name": "vacancy_table",
+          "type": "table",
+          "label": "Vacancy Table",
+          "tableMeta": {
+            "columns": [],
+            "rows": [],
+            "cells": []
+          }
+        }
+      ]
+    },
+    { "title": "Category Wise Vacancy Details",
+      "name": "Category_wise_vacancy_details",
+      "description": "Structured vacancy details in tabular format",
+      "fields": [
+        {
+          "name": "vacancy_table",
+          "type": "table",
+          "label": "Vacancy Table",
+          "tableMeta": {
+            "columns": [],
+            "rows": [],
+            "cells": []
+          }
+        }
+      ]
+    },
+    { "title": "Other Details",
+      "name": "other_details",
+      "description": "Additional structured data that doesn't fit other sections",
+      "fields": [
+        {
+          "name": "important_note",
+          "type": "textarea",
+          "label": "Important Note:"
+        },
+        {
+          "name": "other_details_title",
+          "type": "textarea",
+          "label": "Other Details Title",
+          "value": ""
+        }
+      ]
+    },
+    { "title": "Important Links",
+      "name": "important_links",
+      "description": "Useful external links for candidates",
+      "fields": [
+        {
+          "name": "apply_online_link",
+          "type": "text",
+          "label": "Apply Online",
+          "placeholder": "Enter Anchor Text and URL",  
+          "value": "[Click Here]()"
+        },
+        {
+          "name": "download_notification_link",
+          "type": "text",
+          "label": "Download Notification",
+          "placeholder": "Enter Anchor Text and URL",  
+          "value": "[Click Here]()"
+        },
+        {
+          "name": "download_result",
+          "type": "text",
+          "label": "Download Result",
+          "placeholder": "Enter Anchor Text and URL",  
+          "value": "[Click Here]()"
+        },
+        {
+          "name": "download_admitcard",
+          "type": "text",
+          "label": "Download Admit Card",
+          "placeholder": "Enter Anchor Text and URL",  
+          "value": "[Click Here]()"
+        },
+        {
+          "name": "official_website_link",
+          "type": "text",
+          "label": "Official Website",
+          "placeholder": "Enter Anchor Text and URL",  
+          "value": "[Click Here]()"
+        },
+        {
+          "name": "follow_channel",
+          "type": "text",
+          "label": "Follow Sarkari Result Channel",
+          "placeholder": "Enter Anchor Text and URL",  
+          "value": "[Whatsapp](https://whatsapp.com/channel/0029VbBYkKeATRSvPfHLEx2N) | [Telegram](https://t.me/newsarkari_result)"
+        },
+        {
+          "name": "syllabus_link",
+          "type": "text",
+          "label": "Syllabus",
+          "placeholder": "Enter Anchor Text and URL",  
+          "value": "[Click Here]()"
+        },
+        {
+          "name": "answer_key_link",
+          "type": "text",
+          "label": "Answer Key / Objection",
+          "placeholder": "Enter Anchor Text and URL",  
+          "value": "[Click Here]()"
+        }
+      ]
+    },
+    { "title": "Selection Process",
+      "name": "selection_process",
+      "description": "This section contains details about the selection process for the job post",
+      "fields": [
+        {
+          "name": "selection_process_description",
+          "type": "textarea",
+          "label": "Selection Process Description",
+          "placeholder": "Enter selection process description"
+        },
+        {
+          "name": "selection_process_steps",
+          "type": "list",
+          "label": "Selection Process Steps",
+          "placeholder": "Enter selection process steps"
+        }
+      ]
+    }
+  ]
+}

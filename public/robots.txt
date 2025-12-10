@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /admin
+
+# Host
+Host: https://newsarkariresult.co.in
+
+# Sitemaps
+Sitemap: https://newsarkariresult.co.in/sitemap.xml

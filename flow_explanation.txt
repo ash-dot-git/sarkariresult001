@@ -1,0 +1,125 @@
+# Document Management Flow: Create, Update, and Display
+
+This document provides a detailed explanation of the entire lifecycle of a record within the system, from creation and updates in the admin panel to its final display on the details page.
+
+---
+
+## 1. Core Components & Data Sources
+
+Several key files work together to make this system function:
+
+-   **`src/components/sections/ManagePageClient.jsx`**: The main client component for the admin dashboard. It manages state for the record list, authentication, and orchestrates actions like adding, editing, and deleting records.
+-   **`src/components/sections/UpdateRecordForm.jsx`**: A powerful, dynamic form component used for both creating new records and updating existing ones. It builds the form UI based on a `sections` data structure.
+-   **`src/lib/api.js`**: A crucial library that centralizes all API communication with the backend. It abstracts the `fetch` calls into clean, reusable functions like `addRecord`, `updateRecord`, and `fetchRecordById`.
+-   **`src/app/api/records/route.js`**: The Next.js API route handler. It receives requests from `api.js`, extracts the `action` and `payload`, and forwards them to the appropriate backend (Mongo) function.
+-   **`src/app/[slug]/page.jsx`**: The server component responsible for fetching and rendering a single record's details page for public view.
+-   **`src/data/suggestions.json`**: A static JSON file that acts as a database for autocomplete suggestions. It defines the available section titles and the fields (including labels, placeholders, and types) associated with each section.
+-   **`src/components/modals/MetadataModal.jsx`**: A modal component that allows admins to edit metadata for a specific form field, such as marking it as "important".
+
+---
+
+## 2. Flow 1: New Record Creation
+
+This flow describes the process from clicking "Add New Record" to the data being saved in the database.
+
+**Scenario:** An admin wants to create a new job posting for a "Stenographer".
+
+1.  **Initiation:**
+    -   The admin clicks the **"+ Add New Record"** button in `ManagePageClient.jsx`.
+    -   This calls the `handleAddNew` function, which sets the `view` state to `'form'` and `selectedRecord` to `null`.
+
+2.  **Form Rendering:**
+    -   The `UpdateRecordForm` component renders. Since its `initialData` prop is `null`, it initializes with a default, empty state (one empty section).
+
+3.  **Dynamic Form Building & Suggestions:**
+    -   The admin clicks into the "Section Title" input.
+    -   **How Suggestions Work:** The `AutoCompleteInput` component for the section title uses `sectionSuggestions`, an array derived directly from `suggestions.json` at the top of `UpdateRecordForm.jsx`. The admin sees suggestions like "Important Dates", "Application Fee", etc.
+    -   The admin selects **"Vacancy Details"**.
+    -   Next, the admin clicks **"Add Field"**. A new, empty field appears.
+    -   The admin clicks into the "Field Label" input for this new field.
+    -   **How Field Suggestions Work:** The `AutoCompleteInput` for the field label calls `getFieldSuggestionsForSection('Vacancy Details')`. This function looks up "Vacancy Details" in the `sectionMap` (created from `suggestions.json`) and returns an array of associated field labels, such as "Post Name", "Total Post", etc.
+    -   The admin selects **"Post Name"**.
+    -   The `handleLabelChange` function is triggered. It calls `getFieldDetails('Vacancy Details', 'Post Name')` to retrieve the full details for that field from `suggestions.json`.
+    -   The field's state is automatically updated with the `placeholder` ("Enter the name of the post"), `name` ("post_name"), and `fieldType` ("text"). This ensures data consistency.
+    -   The admin enters "Stenographer Grade C & D" as the value.
+
+4.  **Metadata Handling:**
+    -   The admin decides the "Total Post" field is very important.
+    -   They click the **Edit (pencil) icon** next to the "Total Post" field.
+    -   This calls `handleEditMetadata(field)` in `UpdateRecordForm.jsx`, which sets the `editingField` state to the data for that specific field.
+    -   The `MetadataModal` component renders, displaying the current metadata for the "Total Post" field.
+    -   The admin checks the "Important" checkbox in the modal and clicks "Save".
+    -   The modal's `onSave` prop calls `handleSaveMetadata` in `UpdateRecordForm.jsx`. This function finds the corresponding field in the `sections` state and updates its `important` property to `true`. The field in the UI now has a yellow highlight.
+
+5.  **Submission:**
+    -   After filling out the form, the admin clicks the **"Add Record"** button.
+    -   This triggers `handleSubmit` in `UpdateRecordForm.jsx`.
+    -   The `getPayload(false)` function is called. It transforms the complex form state into a clean, structured JSON object suitable for the backend, stripping out any unnecessary UI-related state.
+    -   The `onSubmit` prop is called, which points to `handleFormSubmit(payload)` in `ManagePageClient.jsx`.
+    -   Inside `handleFormSubmit`, the condition `isUpdating` is `false` because `selectedRecord` is `null`.
+    -   **API Call:** The function calls `addRecord(formData)`.
+    -   In `api.js`, `addRecord` calls `apiRequest('addRecord', { record: formData })`. This sends a `POST` request to `/api/records` with the action `addRecord` and the form data nested under a `record` key.
+    -   The backend receives the request, creates the new document in the database, and returns a success response.
+    -   The `loadRecords()` function is called to refresh the list, and the view switches back to the record list.
+
+---
+
+## 3. Flow 2: Existing Record Updation
+
+This flow describes how an existing record is loaded into the form, modified, and saved.
+
+**Scenario:** The application deadline for the "Stenographer" post has been extended.
+
+1.  **Initiation:**
+    -   In `ManagePageClient.jsx`, the admin finds the "Stenographer" record in the list and clicks the **"Edit"** button.
+    -   This calls `handleEdit(record)`.
+
+2.  **Data Fetching:**
+    -   `handleEdit` calls `fetchRecordById(record.title_slug)`.
+    -   In `api.js`, this sends a `POST` request with the action `getRecordDetails` to the backend.
+    -   The backend fetches the complete, detailed record from the database and returns it.
+    -   `handleEdit` receives the detailed record, sets it as the `selectedRecord` state, and changes the `view` to `'form'`.
+
+3.  **Form Rendering with Initial Data:**
+    -   `UpdateRecordForm.jsx` renders, but this time the `initialData` prop contains the full "Stenographer" record.
+    -   The `useEffect` hooks inside the form fire, populating the `category`, `showIn`, and `sections` state with the data from the existing record. The form now displays all the previously saved information.
+
+4.  **Editing the Data:**
+    -   The admin navigates to the "Important Dates" section and finds the "Application Last Date" field.
+    -   They change the date value to the new, extended date. The process is identical to editing a field in the creation flow.
+
+5.  **Saving Changes (Draft vs. Final):**
+    -   **"Save Changes" Button:** This button is located on each `FormSection`. If the admin clicks it, the `onSaveDraft` function is called. This function calls `getPayload(true)`, which sets a `pendingForm: true` flag in the payload. This is then submitted via `addRecord`, effectively creating a *new draft copy* rather than updating the original.
+    -   **"Update Record" Button (Final Submission):** The admin clicks the main **"Update Record"** button at the bottom of the form.
+    -   This triggers `handleSubmit` and calls `getPayload(false)`.
+    -   The `handleFormSubmit(payload)` function in `ManagePageClient.jsx` is executed.
+    -   This time, `isUpdating` is `true` because `selectedRecord._id` exists and `pendingForm` is false.
+    -   **API Call:** The function calls `updateRecord(selectedRecord.unique_id, formData)`.
+    -   In `api.js`, `updateRecord` now calls `apiRequest('updateRecord', { unique_id: '...', updateData: formData })`. This sends the `unique_id` and the modified form data in the exact structure the backend update function expects.
+    -   The backend finds the record by its `unique_id` and applies the changes.
+    -   The admin is returned to the record list, which now reflects the updated information.
+
+---
+
+## 4. Flow 3: Details Page Display
+
+This flow describes how a record is fetched and rendered for a public user.
+
+**Scenario:** A user clicks a link to view the "Stenographer" job posting.
+
+1.  **Routing & Data Fetching (Server-Side):**
+    -   The user navigates to `/staff-selection-commission-ssc-cgl-2025`. The Next.js router matches this to the dynamic route file `src/app/[slug]/page.jsx`.
+    -   Next.js begins rendering this page on the server.
+    -   **Metadata First:** It first calls the `generateMetadata` function. This function calls `fetchRecordById(params.slug)` to get the post data. It then uses fields like `title` and `short_information` to generate the `<title>` and `<meta name="description">` tags for SEO. This happens before the page body is rendered.
+    -   **Page Content:** It then executes the `PostDetailPage` default export function. This function *also* calls `fetchRecordById(params.slug)` to get the same data for rendering the page body.
+
+2.  **Rendering the Content:**
+    -   If `fetchRecordById` returns nothing, the `notFound()` function is called, and the user sees a standard 404 page.
+    -   The main component iterates through the `post.sections` array using `.map`.
+    -   For each section, it renders a `SectionRenderer` component, which creates the red title bar.
+    -   Inside `SectionRenderer`, it maps over the `section.elements` array.
+    -   **Conditional Rendering:**
+        -   If `element.type === 'field'`, it renders a `FieldRenderer` component.
+        -   If `element.type === 'table'`, it renders a `TableRenderer` component.
+    -   **FieldRenderer Logic:** This component displays the `label` and `value`. It checks the `important` flag; if `true`, it adds a yellow background and a star icon. It also uses a `switch` on the `fieldType` to format the output correctly (e.g., formatting dates, creating clickable links for `key_value_pair`).
+    -   The fully rendered HTML page is sent to the user's browser.

@@ -1,0 +1,39 @@
+/* styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: #a0aec0; /* gray-400 */
+}
+
+/* Custom font */
+@font-face {
+  font-family: 'Faustina';
+  src: url('/fonts/faustina/Faustina-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --font-faustina: 'Faustina', serif;
+}
+
+body {
+  font-family: var(--font-faustina);
+}

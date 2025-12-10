@@ -1,0 +1,61 @@
+[
+    {
+        "id": "2024-001",
+        "title": "UPSC Civil Services Examination 2024",
+        "organization": "Union Public Service Commission (UPSC)",
+        "postName": "Civil Services (IAS, IPS, IFS, etc.)",
+        "totalVacancies": 1105,
+        "category": ["Central Govt", "All India"],
+        "applicationStartDate": "2024-02-01",
+        "applicationEndDate": "2024-03-01",
+        "examDate": "2024-06-15",
+        "admitCardDate": "2024-05-25",
+        "resultDate": "",
+        "eligibility": {
+            "education": "Bachelor’s Degree in any discipline",
+            "ageLimit": {
+                "min": 21,
+                "max": 32,
+                "ageAsOn": "2024-08-01",
+                "relaxation": [
+                    {
+                        "category": "SC/ST",
+                        "years": 5
+                    },
+                    {
+                        "category": "OBC",
+                        "years": 3
+                    }
+                ]
+            }
+        },
+        "applicationFee": {
+            "general": 100,
+            "scst": 0,
+            "obc": 100,
+            "female": 0,
+            "paymentMode": ["Online", "Offline"]
+        },
+        "importantLinks": [
+            {
+                "label": "Apply Online",
+                "url": "https://upsconline.nic.in"
+            },
+            {
+                "label": "Official Notification",
+                "url": "https://upsc.gov.in/sites/default/files/Notif-CSP-2024-Engl-010224.pdf"
+            }
+        ],
+        "selectionProcess": [
+            "Preliminary Exam",
+            "Main Exam",
+            "Interview"
+        ],
+        "jobLocation": "All India",
+        "shortDescription": "UPSC invites applications for Civil Services Examination 2024 for various posts like IAS, IPS, IFS, etc.",
+        "contact": {
+            "email": "csp-upsc@gov.in",
+            "phone": "011-23385271"
+        }
+    }
+]
