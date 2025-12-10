@@ -2,6 +2,7 @@
 import { MongoClient } from 'mongodb';
 import DatabaseFind from "./services.database";
 import { ItemCreate } from "./services-utilities";
+import { getMongoClient } from '@/lib/mongo-pool';
 
 let db; // cache the collection
 
@@ -19,9 +20,7 @@ export const addRecord = async (body) => {
 
     try {
         const mndb = (await DatabaseFind('documents')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
 
@@ -118,9 +117,7 @@ export const deleteRecord = async (body) => {
 
     try {
         const mndb = (await DatabaseFind('documents')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         const existingRecord = await dbse.findOne({ unique_id });
@@ -221,9 +218,7 @@ export const getAllSlugs = async ({ data = {}, srvc }) => {
 
         // Raw records query
         const mndb = (await DatabaseFind('documents')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         const rawRecords = await dbse?.find({ $and: filters }, { _id: 0, title_slug: 1 })
@@ -265,9 +260,7 @@ export const getAllRecords = async ({ data = {}, srvc }) => {
     const trxn = `txn_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     try {
         const mndb = (await DatabaseFind('documents')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         const { searchTerm = "", index = 1, items = 24, categories = [] } = data;
@@ -586,9 +579,7 @@ export const getFilteredRecords = async (body) => {
     const trxn = `txn_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     try {
         const mndb = (await DatabaseFind('documents')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         const { category, searchTerm = "", index = 1, items = 24 } = data;
@@ -772,9 +763,7 @@ export const getLatestImportantRecords = async (body) => {
     const { data, srvc } = body
     try {
         const mndb = (await DatabaseFind('documents')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         const { searchTerm = "", index = 1, items = 24 } = data;
@@ -897,9 +886,7 @@ export const getRecordDetails = async ({ data, srvc = "getRecordDetails" }) => {
 
     try {
         const mndb = (await DatabaseFind('documents')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         if (!data || !data.title_slug) {
@@ -966,9 +953,7 @@ export const updateRecord = async ({ data, srvc }) => {
 
     try {
         const mndb = (await DatabaseFind('documents')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         const { unique_id, updateData } = data || {};
@@ -1100,9 +1085,7 @@ export const getPosterDetails = async (body) => {
 
     try {
         const mndb = (await DatabaseFind('posters')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         // Query can match either postId or unique_id
@@ -1150,9 +1133,7 @@ export const addPosterDetails = async (body) => {
 
     try {
         const mndb = (await DatabaseFind('posters')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         // Validation for required fields
@@ -1237,9 +1218,7 @@ export const updatePosterDetails = async (body) => {
 
     try {
         const mndb = (await DatabaseFind('posters')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         const updateData = {
@@ -1302,9 +1281,7 @@ export const deletePosterDetails = async (body) => {
 
     try {
         const mndb = (await DatabaseFind('posters')).data;
-        if (!client.isConnected?.()) {
-            await client.connect();
-        }
+        var client = await getMongoClient(mndb.urim);
         const dbse = client.db(mndb.dbse).collection(mndb.dbcc);
 
         const result = await dbse.updateOne(
