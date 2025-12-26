@@ -20,7 +20,7 @@ export const metadata = {
     canonical: 'https://newsarkariresult.co.in',
   },
   title: {
-    default: "Sarkari Result |Sarkari Result 2025 | newsarkariresult.co.in",
+    default: "Sarkari Result | Sarkari Result 2025 | newsarkariresult.co.in",
     template: "%s",
   },
   description: "Find Sarkari Result updates, Online Forms, Admit Cards, Answer Keys, Syllabus, Sarkari Yojana, and Scholarships.",
