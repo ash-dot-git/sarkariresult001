@@ -10,7 +10,7 @@ export default function Header() {
         <div className="bg-[#cd0808] py-4 ">
           <div className="h-[160px] flex flex-col justify-center items-center text-center" style={{ fontFamily: 'Arial, sans-serif' }}>
             <Link href="/" aria-label="Sarkari Result" title="Sarkari Result">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight ">NEW SARKARI RESULT</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight ">SARKARI RESULT</h1>
             <p className="text-xl sm:text-2xl md:text-[25px] font-bold text-white leading-tight ">
               NewSarkariResult.co.in
             </p>
