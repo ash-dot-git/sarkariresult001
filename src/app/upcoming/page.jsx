@@ -40,9 +40,9 @@ import { Dot } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Upcoming Government Exams & Sarkari Notifications - New Sarkari Result",
+  title: "Upcoming Government Exams & Sarkari Notifications - Sarkari Result",
   description:
-    "Get the latest updates on upcoming government exams, admit cards, results, answer keys, and recruitment notifications across India. Stay informed with accurate, verified, and real-time updates from New Sarkari Result.",
+    "Get the latest updates on upcoming government exams, admit cards, results, answer keys, and recruitment notifications across India. Stay informed with accurate, verified, and real-time updates from Sarkari Result.",
   alternates: {
     canonical: "https://newsarkariresult.co.in/upcoming",
   },
@@ -55,7 +55,7 @@ export const metadata = {
     "Recruitment Notifications",
     "Job Vacancies",
     "Government Jobs India",
-    "New Sarkari Result",
+    "Sarkari Result",
   ],
 };
 
@@ -68,13 +68,13 @@ export default function UpcomingPage() {
 
       {/* Detailed SEO-friendly description */}
       <p className="text-lg mb-4">
-        Welcome to <span className="text-xl font-semibold text-[#0C0A8D]"><Link href='/'>New Sarkari Result</Link></span>, your trusted platform for all government exam updates in India. Here, you can find real-time information about upcoming <strong>government job vacancies, exam dates, admit card releases, answer keys, and official notifications</strong> from central and state authorities.
+        Welcome to <span className="text-xl font-semibold text-[#0C0A8D]"><Link href='/'>Sarkari Result</Link></span>, your trusted platform for all government exam updates in India. Here, you can find real-time information about upcoming <strong>government job vacancies, exam dates, admit card releases, answer keys, and official notifications</strong> from central and state authorities.
       </p>
 
 
       <p className="mb-4 text-gray-700">
         <Dot className="inline-block w-6 h-6 mr-2 align-middle" />
-        <span className="text-xl font-semibold text-[#0C0A8D]"><Link href='/'>New Sarkari Result</Link></span> में आपका स्वागत है। भारत भर में सरकारी निकायों द्वारा आयोजित विभिन्न प्रतियोगी परीक्षाओं के आगामी विवरण, रिजल्ट, एडमिट कार्ड, परीक्षा तिथियां और भर्ती सूचनाएं सबसे पहले प्राप्त करें। हमारी टीम आधिकारिक स्रोतों से सत्यापित जानकारी समय पर अपडेट करती है ताकि अभ्यर्थियों को किसी भी महत्वपूर्ण तिथि की जानकारी से वंचित न रहना पड़े।
+        <span className="text-xl font-semibold text-[#0C0A8D]"><Link href='/'>Sarkari Result</Link></span> में आपका स्वागत है। भारत भर में सरकारी निकायों द्वारा आयोजित विभिन्न प्रतियोगी परीक्षाओं के आगामी विवरण, रिजल्ट, एडमिट कार्ड, परीक्षा तिथियां और भर्ती सूचनाएं सबसे पहले प्राप्त करें। हमारी टीम आधिकारिक स्रोतों से सत्यापित जानकारी समय पर अपडेट करती है ताकि अभ्यर्थियों को किसी भी महत्वपूर्ण तिथि की जानकारी से वंचित न रहना पड़े।
       </p>
 
       <p className="mb-6 text-gray-700">
@@ -96,7 +96,7 @@ export default function UpcomingPage() {
       </p>
       {/* Additional SEO paragraph */}
       <p className="mt-6 text-gray-800 text-sm leading-relaxed">
-        At New Sarkari Result, we focus on providing <strong>100% accurate and verified information</strong> about upcoming government jobs, exams, results, admit cards, answer keys, and official notices. Our coverage includes exams from UPSC, SSC, Banking, Railways, State Governments, Teaching, Defence, Police, PSU, and Judiciary. All updates are sourced directly from official portals and verified multiple times for authenticity.
+        At Sarkari Result, we focus on providing <strong>100% accurate and verified information</strong> about upcoming government jobs, exams, results, admit cards, answer keys, and official notices. Our coverage includes exams from UPSC, SSC, Banking, Railways, State Governments, Teaching, Defence, Police, PSU, and Judiciary. All updates are sourced directly from official portals and verified multiple times for authenticity.
         Stay connected with us to never miss any important government notification and get your exam preparation on track.
       </p>
 

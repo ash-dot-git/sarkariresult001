@@ -7,7 +7,7 @@ export function getComprehensiveSchema({
   datePublished,
   dateModified,
   postTitle,
-  authorName = 'New Sarkari Result',
+  authorName = 'Sarkari Result',
   faqSchema,
 }) {
   const webPage = {

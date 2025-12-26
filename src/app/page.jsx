@@ -18,7 +18,7 @@ export default async function Page({ searchParams }) {
   const schema = getComprehensiveSchema({
     pageType: searchQuery ? 'SearchResultsPage' : 'WebPage',
     url: 'https://newsarkariresult.co.in/',
-    title: 'Sarkari Result | Sarkari Result 2025 | newsarkariresult.co.in',
+    title: 'Sarkari Result 2025 | newsarkariresult.co.in',
     description: 'Find Sarkari Result updates, Online Forms, Admit Cards, Answer Keys, Syllabus, Sarkari Yojana, and Scholarships. Stay updated with the latest government job alerts in India – trusted by millions.',
     thumbnailUrl: 'https://newsarkariresult.co.in/banner.png',
     datePublished: '2024-01-01T00:00:00+00:00',
@@ -120,7 +120,7 @@ export default async function Page({ searchParams }) {
       {/* Top Sarkari Result Pages / टॉप सरकारी रिजल्ट पेज */}
       <section className="bg-white p-6 sm:p-8 my-6 border-t border-b border-gray-200">
         <h2 className="text-2xl font-bold mb-6 text-red-600 text-center">
-          Top New Sarkari Result Pages / टॉप सरकारी रिजल्ट पेज
+          Top Sarkari Result Pages / टॉप सरकारी रिजल्ट पेज
         </h2>
 
         {/* Dynamic links - Exam Types */}
@@ -129,7 +129,7 @@ export default async function Page({ searchParams }) {
           {examTypeOptions.map((exam) => (
             <li key={exam.key} className="break-inside-avoid">
               <a href={`https://newsarkariresult.co.in/sarkari-result/${exam.key}`} className="text-blue-600 hover:underline">
-                New Sarkari Result {exam.label} / {exam.labelx}
+                Sarkari Result {exam.label} / {exam.labelx}
               </a>
             </li>
           ))}
@@ -141,7 +141,7 @@ export default async function Page({ searchParams }) {
           {applicableStatesOptions.map((state) => (
             <li key={state.key} className="break-inside-avoid">
               <a href={`https://newsarkariresult.co.in/sarkari-result/${state.key}`} className="text-blue-600 hover:underline">
-                New Sarkari Result {state.label} / {state.labelx}
+                Sarkari Result {state.label} / {state.labelx}
               </a>
             </li>
           ))}
@@ -153,7 +153,7 @@ export default async function Page({ searchParams }) {
           {minimumQualificationOptions.map((qual) => (
             <li key={qual.key} className="break-inside-avoid">
               <a href={`https://newsarkariresult.co.in/sarkari-result/${qual.key}`} className="text-blue-600 hover:underline">
-                New Sarkari Result {qual.label} / {qual.labelx}
+                Sarkari Result {qual.label} / {qual.labelx}
               </a>
             </li>
           ))}
@@ -163,7 +163,7 @@ export default async function Page({ searchParams }) {
       {/* Official Website & FAQ Section */}
       <section className="bg-white p-6 sm:p-8 my-6 border-t border-b border-gray-200">
         {/* Official Website Info */}
-        <h2 className="text-2xl font-bold mb-4 text-red-600 text-center">New Sarkari Result Official Website / हमारी आधिकारिक वेबसाइट</h2>
+        <h2 className="text-2xl font-bold mb-4 text-red-600 text-center">Sarkari Result Official Website / हमारी आधिकारिक वेबसाइट</h2>
         <p className="text-gray-800 leading-relaxed mb-2 text-justify">
           <strong>English:</strong> <a href="https://newsarkariresult.co.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">NewSarkariResult.co.in</a> and <a href="https://newrojgarresult.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">NewRojgarResult.com</a> are authentic platforms managed by a professional team with over 14 years of experience in tracking government jobs, results, and exam notifications. We monitor official government portals, cross-verify all details multiple times, and summarize information for easy understanding. We never ask for user login or personal details, ensuring complete privacy.
         </p>
@@ -174,17 +174,17 @@ export default async function Page({ searchParams }) {
           <strong>Disclaimer:</strong> These websites are independent and are not officially associated with any government or official websites. All information is provided for general informational purposes only.
         </p>
 
-        {/* FAQ – New Sarkari Result / अक्सर पूछे जाने वाले प्रश्न */}
+        {/* FAQ – Sarkari Result / अक्सर पूछे जाने वाले प्रश्न */}
         <section className=" p-6 bg-white border-t border-gray-200">
           <h2 className="text-2xl font-bold mb-6 text-red-600 text-center">
-            FAQ – New Sarkari Result / अक्सर पूछे जाने वाले प्रश्न
+            FAQ – Sarkari Result / अक्सर पूछे जाने वाले प्रश्न
           </h2>
 
           <div className="space-y-4 text-gray-800">
             <div>
-              <h3 className="font-semibold">What is New Sarkari Result?</h3>
+              <h3 className="font-semibold">What is Sarkari Result?</h3>
               <p>
-                New Sarkari Result provides the latest updates on government job vacancies, exam results, admit cards, answer keys, and other official notifications across India. Our platform ensures aspirants receive accurate, verified, and up-to-date information.
+                Sarkari Result provides the latest updates on government job vacancies, exam results, admit cards, answer keys, and other official notifications across India. Our platform ensures aspirants receive accurate, verified, and up-to-date information.
               </p>
             </div>
 
@@ -198,7 +198,7 @@ export default async function Page({ searchParams }) {
             <div>
               <h3 className="font-semibold">Is the website free to use?</h3>
               <p>
-                Yes! Both New Sarkari Result and New Rojgar Result are completely free to use. You can access all information without charges, subscriptions, or the need to submit personal details.
+                Yes! Both Sarkari Result and New Rojgar Result are completely free to use. You can access all information without charges, subscriptions, or the need to submit personal details.
               </p>
             </div>
 
@@ -219,7 +219,7 @@ export default async function Page({ searchParams }) {
             <div>
               <h3 className="font-semibold">Are your results and updates official?</h3>
               <p>
-                While we provide accurate and verified information, New Sarkari Result is not an official government website. All data is collected from official sources and presented clearly for aspirants’ convenience.
+                While we provide accurate and verified information, Sarkari Result is not an official government website. All data is collected from official sources and presented clearly for aspirants’ convenience.
               </p>
             </div>
 

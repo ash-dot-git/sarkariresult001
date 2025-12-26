@@ -17,7 +17,7 @@ export const metadata = {
     title: 'Admission',
     description:"Find the latest admission notifications for various courses and universities. Get timely updates and direct links to apply.",
     url: 'https://newsarkariresult.co.in/about',
-    siteName: 'New Sarkari Result',
+    siteName: 'Sarkari Result',
     locale: 'en_IN',
     type: 'article',
   },

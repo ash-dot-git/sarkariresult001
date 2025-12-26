@@ -21,7 +21,7 @@ export const metadata = {
     title: 'About Us - NewSarkariResult.co.in',
     description: 'Trusted source for latest Sarkari jobs, results, admit cards, and more. Verified and authentic information for aspirants across India.',
     url: 'https://newsarkariresult.co.in/about',
-    siteName: 'New Sarkari Result',
+    siteName: 'Sarkari Result',
     locale: 'en_IN',
     type: 'article',
   },
