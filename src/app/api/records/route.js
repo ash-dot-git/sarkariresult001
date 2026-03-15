@@ -1,73 +1,143 @@
-import { callMongoFunction } from '@/lib/mongo-app';
-import { createApiResponse } from '@/lib/api-helpers';
 import { NextResponse } from 'next/server';
+import * as RecordService from '@/lib/services/recordService';
+import { createApiResponse } from '@/lib/api-helpers';
 import { cors } from '@/lib/cors';
 
-// === CORS helper to apply headers ===
+/**
+ * Records API — Main Route
+ *
+ * POST /api/records
+ *   Routes actions from the client-side api.js to the service layer.
+ *   Kept as a POST endpoint for backward compatibility with the existing
+ *   client-side code (api.js sends { action, payload, srvc }).
+ *
+ * GET /api/records?search=&page=1&limit=25&categories=
+ *   RESTful alternative for fetching records via query params.
+ */
+
+// ─── CORS ──────────────────────────────────────────────────────────────────────
+
 function applyCors(response) {
-  const corsHeaders = cors(); // or pass request if needed
+  const corsHeaders = cors();
   Object.entries(corsHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
   return response;
 }
 
-// === OPTIONS handler ===
 export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: cors()
-  });
+  return new NextResponse(null, { status: 204, headers: cors() });
 }
 
-// === POST handler ===
+// ─── ACTION MAP ────────────────────────────────────────────────────────────────
+
+/**
+ * Maps client action names to service functions.
+ * This is the single source of truth for which actions are callable via the API.
+ */
+const ACTION_MAP = {
+  getAllRecords:              RecordService.getAllRecords,
+  getRecordDetails:          RecordService.getRecordDetails,
+  getCategoryRecords:        RecordService.getCategoryRecords,
+  getFilteredRecords:        RecordService.getFilteredRecords,
+  getLatestImportantRecords: RecordService.getLatestImportantRecords,
+  getAllSlugs:               RecordService.getAllSlugs,
+  addRecord:                 RecordService.addRecord,
+  updateRecord:              RecordService.updateRecord,
+  deleteRecord:              RecordService.deleteRecord,
+};
+
+// ─── POST Handler (Legacy + Admin) ─────────────────────────────────────────────
+
 export async function POST(request) {
   let action;
   try {
-    const { action: clientAction, payload: clientPayload, srvc } = await request.json();
-    action = clientAction;
+    const body = await request.json();
+    action = body.action;
+    const payload = body.payload;
 
     if (!action) {
-      const response = createApiResponse({
+      return applyCors(createApiResponse({
         stat: false,
         code: '400',
-        message: "Action not specified in the request body.",
+        message: 'Action not specified in the request body.',
         trxn: `txn_${Date.now()}`,
-        srvc: "api-gateway"
-      });
-      return applyCors(response);
+        srvc: 'api-gateway',
+      }));
     }
 
-    const backendPayload = {
-      data: clientPayload,
-      srvc: srvc || 'web-client'
-    };
+    const handler = ACTION_MAP[action];
+    if (!handler) {
+      return applyCors(createApiResponse({
+        stat: false,
+        code: '400',
+        message: `Unknown action: '${action}'.`,
+        trxn: `txn_${Date.now()}`,
+        srvc: 'api-gateway',
+      }));
+    }
 
-    const realmResponse = await callMongoFunction(action,   backendPayload);
+    const serviceResponse = await handler(payload);
 
-    // Ensure the response is in the standardized format before creating the API response.
-    const formattedResponse = {
+    return applyCors(createApiResponse({
       stat: true,
       code: '200',
       message: `Action '${action}' executed successfully.`,
-      data: realmResponse, // The actual data from the Mongo function
+      data: serviceResponse,
       trxn: `txn_${Date.now()}`,
-      srvc: "api-gateway"
-    };
+      srvc: 'api-gateway',
+    }));
 
-    const response = createApiResponse(formattedResponse);
-
-    return applyCors(response);
-
-  } catch (e) {
-    const response = createApiResponse({
+  } catch (error) {
+    console.error(`[API] POST /api/records (action: ${action}) failed:`, error.message);
+    return applyCors(createApiResponse({
       stat: false,
       code: '500',
-      message: "An unexpected error occurred on the server.",
-      data: { error: e.message },
+      message: 'An unexpected error occurred on the server.',
+      data: { error: error.message },
       trxn: `txn_${Date.now()}`,
-      srvc: "api-gateway"
+      srvc: 'api-gateway',
+    }));
+  }
+}
+
+// ─── GET Handler (RESTful) ─────────────────────────────────────────────────────
+
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get('search') || '';
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '25', 10);
+    const categories = searchParams.get('categories')
+      ? searchParams.get('categories').split(',')
+      : [];
+
+    const serviceResponse = await RecordService.getAllRecords({
+      searchTerm: search,
+      index: page,
+      items: limit,
+      categories,
     });
-    return applyCors(response);
+
+    return applyCors(createApiResponse({
+      stat: true,
+      code: '200',
+      message: 'Records fetched successfully.',
+      data: serviceResponse,
+      trxn: `txn_${Date.now()}`,
+      srvc: 'api-gateway',
+    }));
+
+  } catch (error) {
+    console.error('[API] GET /api/records failed:', error.message);
+    return applyCors(createApiResponse({
+      stat: false,
+      code: '500',
+      message: 'Failed to fetch records.',
+      data: { error: error.message },
+      trxn: `txn_${Date.now()}`,
+      srvc: 'api-gateway',
+    }));
   }
 }

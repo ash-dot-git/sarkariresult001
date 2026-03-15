@@ -126,7 +126,8 @@ export default function ManagePageClient() {
     setIsLoading(true);
     setError(null);
     try {
-      const detailedRecord = await fetchRecordById(record.unique_id, { noCache: true });
+      const slugToFetch = record.title_slug || record.unique_id;
+      const detailedRecord = await fetchRecordById(slugToFetch, { noCache: true });
       if (detailedRecord === null) {
         throw new Error('Failed to fetch record details');
       }

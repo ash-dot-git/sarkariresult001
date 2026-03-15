@@ -14,7 +14,7 @@ export function VacancyDetailsSection({ elements = [], title = 'Sarkari Result',
       {/* Section Heading  */}
       <header className="bg-white text-center font-bold leading-tight space-y-1 p-3">
         {orgTitle && (
-          <h1 className="text-[#ff0000] text-xl md:text-2xl">{orgTitle}</h1>
+          <h2 className="text-[#ff0000] font-bold text-xl md:text-2xl">{orgTitle}</h2>
         )}
         <h2 id="vacancy-details-heading" className="text-[#ff0000] text-xl md:text-2xl">
           {title || 'Vacancy Details'}

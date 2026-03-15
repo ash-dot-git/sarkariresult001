@@ -18,19 +18,6 @@
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
   background: #a0aec0; /* gray-400 */
 }
-@font-face {
-  font-family: 'Faustina';
-  src: url('/fonts/faustina/Faustina-SemiBoldItalic.ttf') format('truetype');
-  font-weight: 600;
-  font-style: italic;
-  font-display: swap;
-}
-
-:root {
-  --font-faustina: 'Faustina', serif;
-}
-
 body {
-  font-family: var(--font-faustina);
+  font-family: var(--font-faustina), serif;
 }
-

@@ -1,47 +1,26 @@
-// components/ui/ColorMarkdownRenderer.jsx
-import MarkdownRenderer from './MarkdownRenderer';
+import StyledText from './StyledText';
 
+/**
+ * ColorMarkdownRenderer
+ * 
+ * Re-written to act as a lightweight wrapper around the new StyledText component.
+ * We keep the filename the same to avoid breaking 20+ consumer imports across the project.
+ * 
+ * It no longer uses ReactMarkdown or the 14 heavy regex string replacements.
+ * 
+ * @param {string} content - The text with {red}...{/red} tags
+ * @param {string} pClassName - Classes applied to the wrapper span
+ * @param {string} aClassName - Classes applied to links (handled internally by StyledText now)
+ */
 const ColorMarkdownRenderer = ({ content, pClassName = "leading-relaxed", aClassName }) => {
   if (!content || typeof content !== 'string') return null;
-  const transformed = content
-    // Text colors
-    .replace(/\{red\}(.+?)\{\/red\}/g, '<span style="color:#ff0000;">$1</span>')
-    .replace(/\{blue\}(.+?)\{\/blue\}/g, '<span style="color:#2e01ff;">$1</span>')
-    .replace(/\{green\}(.+?)\{\/green\}/g, '<span style="color:#008101;">$1</span>')
-    .replace(/\{yellow\}(.+?)\{\/yellow\}/g, '<span style="color:#fffe01;">$1</span>')
-    .replace(/\{pink\}(.+?)\{\/pink\}/g, '<span style="color:#fe00fe;">$1</span>')
-    .replace(/\{color:(.+?)\}(.+?)\{\/color\}/g, '<span style="color:$1;">$2</span>')
-  
-    // Background colors
-    .replace(/\{bgRed\}(.+?)\{\/bgRed\}/g, '<span style="background-color:#ff0000;">$1</span>')
-    .replace(/\{bgGreen\}(.+?)\{\/bgGreen\}/g, '<span style="background-color:#008101;">$1</span>')
-    .replace(/\{bgYellow\}(.+?)\{\/bgYellow\}/g, '<span style="background-color:#fffe01;">$1</span>')
-    .replace(/\{bgPink\}(.+?)\{\/bgPink\}/g, '<span style="background-color:#fe00fe;">$1</span>')
-    .replace(/\{bgBlue\}(.+?)\{\/bgBlue\}/g, '<span style="background-color:#2e01ff;">$1</span>')
-    .replace(/\{bgcolor:(.+?)\}(.+?)\{\/bgcolor\}/g, '<span style="background-color:$1;">$2</span>')
 
-    // Font sizes
-    .replace(/\{size:(.+?)\}(.+?)\{\/size\}/g, '<span style="font-size:$1;">$2</span>')
-    .replace(/\{text-(.+?)\}(.+?)\{\/text-\1\}/g, '<span class="text-$1">$2</span>')
-
-    // Font weight
-    .replace(/\{font-(.+?)\}(.+?)\{\/font-\1\}/g, '<span class="font-$1">$2</span>')
-
-    // Underline
-    .replace(/\{underline\}(.+?)\{\/underline\}/g, '<u>$1</u>')
-
-    // Alignment
-    .replace(/\{align:(left|center|right)\}(.+?)\{\/align\}/g, '<div style="text-align:$1;">$2</div>');
+  // Render raw markdown links if aClassName is provided for legacy compatibility
+  // StyledText handles it naturally, but pClassName provides the base styles.
+  const combinedClassName = `${pClassName}`;
 
   return (
-    <MarkdownRenderer
-      content={transformed}
-      asInline={true}
-      pClassName={pClassName}
-      strongClassName="font-bold"
-      liClassName="list-disc ml-5 text-left"
-      aClassName={`text-[#2e01ff]  hover:underline ${aClassName} `}
-    />
+    <StyledText text={content} className={combinedClassName} />
   );
 };
 

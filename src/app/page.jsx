@@ -72,14 +72,15 @@ export default async function Page({ searchParams }) {
       </section>
 
       <section className="w-full px-2">
-        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_400px] gap-2">
+        <div className={`grid grid-cols-1 gap-2 ${upcomingPosts.length > 0 ? 'md:grid-cols-[minmax(0,1fr)_400px]' : ''}`}>
           <div className="-mt-2 overflow-hidden">
             <FilterSection/>
-
           </div>
-          <div className="w-full md:w-[400px]">
-            <UpcomingScroller posts={upcomingPosts} />
-          </div>
+          {upcomingPosts.length > 0 && (
+            <div className="w-full md:w-[400px]">
+              <UpcomingScroller posts={upcomingPosts} />
+            </div>
+          )}
         </div>
       </section>
 

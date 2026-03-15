@@ -103,9 +103,9 @@ export default function MetaDetailsSection({ elements, inserted, updated, filter
           {/* Section Heading */}
           <header className="bg-white text-center font-bold leading-tight space-y-1 mt-5">
 
-            <h1 id="vacancy-details-heading" className="text-[#ff0000] text-xl md:text-2xl" >
+            <h2 id="vacancy-details-heading" className="text-[#ff0000] font-bold text-xl md:text-2xl" >
               {postNameEl?.value || 'New Rojgar Result'}
-            </h1>
+            </h2>
             <h2 className="text-[#008101] text-lg md:text-xl">Sarkari Result</h2>
             <p className="text-[#2e01ff]">
               <Link href="https://newsarkariresult.co.in" target="_blank" rel="noopener noreferrer" aria-label="Visit NewSarkariResult.Co.In">

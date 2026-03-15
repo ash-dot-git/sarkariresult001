@@ -103,6 +103,8 @@ const handleSelect = (suggestion) => {
 
 
 
+  const listboxId = `listbox-${props.name || props.id || Math.random().toString(36).substr(2, 9)}`;
+
   return (
     <div className="relative w-full" ref={containerRef}>
       <BaseStyledInput
@@ -110,23 +112,30 @@ const handleSelect = (suggestion) => {
         value={value}
         onChange={handleChange}
         onFocus={() => setIsFocused(true)}
-        // onBlur={() => setTimeout(() => setIsFocused(false), 150)}
         onKeyDown={handleKeyDown}
-        autoComplete="off" // Prevent browser's native autocomplete
+        autoComplete="off"
+        role="combobox"
+        aria-expanded={isFocused && filteredSuggestions.length > 0}
+        aria-autocomplete="list"
+        aria-controls={listboxId}
+        aria-activedescendant={highlightedIndex >= 0 ? `${listboxId}-option-${highlightedIndex}` : undefined}
       />
-      {/* Ensure suggestions are only shown when focused and there are suggestions to show */}
       {isFocused && filteredSuggestions.length > 0 && (
-        <ul className="absolute z-50 left-0 top-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto block min-w-full">
-          {/* <ul className="absolute z-50 left-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto inline-block min-w-full"> */}
-          {/* // <ul className="absolute left-0 right-0 w-full z-50 mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"> */}
+        <ul
+          id={listboxId}
+          role="listbox"
+          className="absolute z-50 left-0 top-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto block min-w-full"
+        >
           {filteredSuggestions.map((suggestion, index) => (
             <li
-              key={suggestion} // Use the suggestion itself as the key, assuming they are unique
+              key={suggestion}
+              id={`${listboxId}-option-${index}`}
+              role="option"
+              aria-selected={index === highlightedIndex}
               onClick={() => handleSelect(suggestion)}
               className={`p-2 cursor-pointer bg-white hover:bg-gray-100 ${
                 index === highlightedIndex ? 'bg-indigo-100' : ''
               }`}
-
             >
               {suggestion}
             </li>

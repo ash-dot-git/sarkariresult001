@@ -1,76 +1,86 @@
 import { NextResponse } from 'next/server';
-import { callMongoFunction } from '@/lib/mongo-app';
-import { cors } from '@/lib/cors';
+import * as RecordService from '@/lib/services/recordService';
 import { createApiResponse } from '@/lib/api-helpers';
+import { cors } from '@/lib/cors';
 
-// === CORS helper to apply headers ===
+/**
+ * Records API — Single Record Operations
+ * Route: /api/records/[id]
+ *
+ * PUT    → Update a record by unique_id (admin only)
+ * DELETE → Delete a record by unique_id (admin only)
+ */
+
 function applyCors(response) {
-  const corsHeaders = cors(); // or pass request if needed
+  const corsHeaders = cors();
   Object.entries(corsHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
   return response;
 }
 
-// === OPTIONS handler ===
 export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: cors()
-  });
+  return new NextResponse(null, { status: 204, headers: cors() });
 }
+
+// ─── PUT: Update record ────────────────────────────────────────────────────────
 
 export async function PUT(request, { params }) {
   try {
     const { id } = await params;
-    const record = await request.json();
+    const updateData = await request.json();
 
-    const backendPayload = {
-      data: { id, ...record },
-      srvc: 'web-client'
-    };
+    const serviceResponse = await RecordService.updateRecord({
+      unique_id: id,
+      updateData,
+    });
 
-    const realmResponse = await callMongoFunction('updateRecord', backendPayload);
-    const response = createApiResponse(realmResponse);
-
-    return applyCors(response);
-  } catch (e) {
-    console.error("API Error updating record:", e);
-    const response = createApiResponse({
+    return applyCors(createApiResponse({
+      stat: serviceResponse.stat,
+      code: serviceResponse.stat ? '200' : '404',
+      message: serviceResponse.stat ? 'Record updated successfully.' : serviceResponse.message,
+      data: serviceResponse.data || {},
+      trxn: `txn_${Date.now()}`,
+      srvc: 'api-gateway',
+    }));
+  } catch (error) {
+    console.error('[API] PUT /api/records/[id] failed:', error.message);
+    return applyCors(createApiResponse({
       stat: false,
       code: '500',
-      message: "Failed to update record",
-      data: { error: e.message },
+      message: 'Failed to update record.',
+      data: { error: error.message },
       trxn: `txn_${Date.now()}`,
-      srvc: "api-gateway"
-    });
-    return applyCors(response);
+      srvc: 'api-gateway',
+    }));
   }
 }
+
+// ─── DELETE: Remove record ─────────────────────────────────────────────────────
 
 export async function DELETE(request, { params }) {
   try {
     const { id } = await params;
 
-    const backendPayload = {
-      data: { id },
-      srvc: 'web-client'
-    };
+    const serviceResponse = await RecordService.deleteRecord({ unique_id: id });
 
-    const realmResponse = await callMongoFunction('deleteRecord', backendPayload);
-    const response = createApiResponse(realmResponse);
-
-    return applyCors(response);
-  } catch (e) {
-    console.error("API Error deleting record:", e);
-    const response = createApiResponse({
+    return applyCors(createApiResponse({
+      stat: serviceResponse.stat,
+      code: serviceResponse.stat ? '200' : '404',
+      message: serviceResponse.stat ? 'Record deleted successfully.' : serviceResponse.message,
+      data: serviceResponse.data || {},
+      trxn: `txn_${Date.now()}`,
+      srvc: 'api-gateway',
+    }));
+  } catch (error) {
+    console.error('[API] DELETE /api/records/[id] failed:', error.message);
+    return applyCors(createApiResponse({
       stat: false,
       code: '500',
-      message: "Failed to delete record",
-      data: { error: e.message },
+      message: 'Failed to delete record.',
+      data: { error: error.message },
       trxn: `txn_${Date.now()}`,
-      srvc: "api-gateway"
-    });
-    return applyCors(response);
+      srvc: 'api-gateway',
+    }));
   }
 }
