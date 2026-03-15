@@ -12,6 +12,7 @@ import * as RecordService from './services/recordService.js';
  * The callApi() function signature is preserved so that all existing consumers
  * (ListingTable, LatestUpdates, [slug]/page, etc.) work without changes.
  */
+import { unstable_cache } from 'next/cache';
 
 /**
  * Maps action names to their corresponding service functions.
@@ -48,7 +49,29 @@ export async function callApi(action, payload) {
   }
 
   try {
-    const result = await handler(payload);
+    // Only cache read operations
+    const isMutation = ['addRecord', 'updateRecord', 'deleteRecord'].includes(action);
+
+    if (isMutation) {
+      const result = await handler(payload);
+      if (result && result.stat === false) {
+        throw new Error(result.message || `Action '${action}' returned a failure status.`);
+      }
+      return result;
+    }
+
+    // Cache read operations with unstable_cache
+    const stringifiedPayload = payload ? JSON.stringify(payload) : '{}';
+    const cachedFn = unstable_cache(
+      async () => handler(payload),
+      [`api-cache-${action}-${stringifiedPayload}`],
+      {
+        revalidate: 30, // 30 seconds ISR for DB queries
+        tags: [`api-${action}`],
+      }
+    );
+
+    const result = await cachedFn();
 
     // Check for service-level failures
     if (result && result.stat === false) {

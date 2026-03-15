@@ -110,14 +110,14 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        <div className="flex flex-col min-h-screen font-arial md:flex-row md:justify-center">
-          <aside className="w-fit google-ads" />
-          <div className="flex-1 flex flex-col max-w-[1070px]">
+        <div className="flex flex-col min-h-screen font-arial md:flex-row md:justify-center w-full">
+          <aside className="hidden lg:block lg:w-[160px] xl:w-[250px] 2xl:w-[300px] google-ads flex-shrink-0" />
+          <div className="flex-1 flex flex-col max-w-[1070px] w-full">
             <Header />
             <main className="flex-grow">{children}</main>
             <Footer />
           </div>
-          <aside className="w-fit google-ads" />
+          <aside className="hidden lg:block lg:w-[160px] xl:w-[250px] 2xl:w-[300px] google-ads flex-shrink-0" />
         </div>
       </body>
     </html>
