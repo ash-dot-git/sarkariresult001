@@ -233,6 +233,22 @@ export async function getAllSlugs() {
 // ─── WRITE OPERATIONS (Admin only) ─────────────────────────────────────────────
 
 /**
+ * Fetches all slugs and their last updated dates for dynamic sitemap.
+ * Used by: src/app/sitemap.js
+ *
+ * @returns {Promise<object>} Standard response with { list }
+ */
+export async function getAllSitemapNodes() {
+  try {
+    const slugs = await RecordQueries.getAllSitemapNodes();
+    return success({ list: slugs });
+  } catch (error) {
+    console.error('[RecordService] getAllSitemapNodes failed:', error.message);
+    return failure('Failed to fetch sitemap nodes.');
+  }
+}
+
+/**
  * Add a new record to the database.
  * Generates a unique_id and sets timestamps automatically.
  * Used by: admin panel create form.
