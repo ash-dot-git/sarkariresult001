@@ -7,6 +7,10 @@ export const metadata = {
   title: "Page Not Found - Sarkari Result",
   description:
     "The page you are looking for does not exist. Find the latest government job updates, results, and admit cards on Sarkari Result.",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default async function NotFound() {
@@ -49,7 +53,7 @@ export default async function NotFound() {
     {
       question: "How can I contact support if I face issues?",
       answer:
-        "You can visit our Contact Us page to report broken links or any other issues. We’re always ready to assist.",
+        "You can visit our Contact Us page to report broken links or any other issues. We're always ready to assist.",
     },
     {
       question: "Can I find results and admit cards here?",
@@ -88,18 +92,17 @@ export default async function NotFound() {
     }
   ];
 
-  const latestUpdates = await (async () => {
-    try {
-      const result = await callApi("getLatestImportantRecords", {
-        index: 1,
-        items: 15,
-      });
-      return result?.data?.list || [];
-    } catch (error) {
-      console.error("Failed to fetch latest updates:", error);
-      return [];
-    }
-  })();
+  let latestUpdates = [];
+  try {
+    const result = await callApi("getLatestImportantRecords", {
+      index: 1,
+      items: 15,
+    });
+    latestUpdates = result?.data?.list || [];
+  } catch (error) {
+    console.error("Failed to fetch latest updates for 404 page:", error);
+    // Gracefully degrade — show the 404 page without latest updates
+  }
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">

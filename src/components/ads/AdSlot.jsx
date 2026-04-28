@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { ADSENSE_CLIENT } from '@/lib/adsense';
 
 const MIN_HEIGHT_CLASS = {
@@ -21,24 +21,55 @@ export default function AdSlot({
   className = '',
 }) {
   const adRef = useRef(null);
+  const pushedRef = useRef(false);
 
-  useEffect(() => {
-    if (!slot || !ADSENSE_CLIENT || !adRef.current) return;
-    if (adRef.current.dataset.adsenseRendered === 'true') return;
-
-    adRef.current.dataset.adsenseRendered = 'true';
+  const tryPushAd = useCallback(() => {
+    if (!adRef.current || pushedRef.current) return;
 
     try {
-      window.adsbygoogle = window.adsbygoogle || [];
-      window.adsbygoogle.push({});
+      // Only push if adsbygoogle is actually defined by the SDK
+      if (typeof window.adsbygoogle !== 'undefined') {
+        window.adsbygoogle = window.adsbygoogle || [];
+        window.adsbygoogle.push({});
+        pushedRef.current = true;
+      }
     } catch (error) {
-      adRef.current.dataset.adsenseRendered = 'false';
-
       if (process.env.NODE_ENV !== 'production') {
         console.warn('AdSense render failed:', error);
       }
     }
-  }, [slot]);
+  }, []);
+
+  useEffect(() => {
+    if (!slot || !ADSENSE_CLIENT || !adRef.current) return;
+
+    // Reset pushed state when slot changes (e.g. route change re-mount)
+    pushedRef.current = false;
+
+    // Use requestAnimationFrame to ensure the <ins> element is in the DOM
+    const rafId = requestAnimationFrame(() => {
+      if (window.__adsenseLoaded) {
+        // SDK already loaded — push immediately
+        tryPushAd();
+      } else {
+        // SDK not loaded yet — listen for the custom event
+        const handleReady = () => {
+          // Small delay to ensure DOM is fully painted
+          setTimeout(tryPushAd, 100);
+        };
+        window.addEventListener('adsense-ready', handleReady, { once: true });
+
+        // Cleanup listener if component unmounts before SDK loads
+        return () => {
+          window.removeEventListener('adsense-ready', handleReady);
+        };
+      }
+    });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
+  }, [slot, tryPushAd]);
 
   if (!slot || !ADSENSE_CLIENT) return null;
 

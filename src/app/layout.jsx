@@ -18,9 +18,6 @@ const faustina = Faustina({
 
 export const metadata = {
   metadataBase: new URL('https://newsarkariresult.co.in'),
-  alternates: {
-    canonical: 'https://newsarkariresult.co.in',
-  },
   title: {
     default: "Sarkari Result | Sarkari Result 2025 | newsarkariresult.co.in",
     template: "%s | Sarkari Result",

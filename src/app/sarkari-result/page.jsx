@@ -13,6 +13,9 @@ export async function generateMetadata() {
   return {
     title: data.title,
     description: data.description,
+    alternates: {
+      canonical: 'https://newsarkariresult.co.in/sarkari-result',
+    },
   };
 }
 

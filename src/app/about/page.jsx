@@ -5,6 +5,9 @@ export const metadata = {
   title: 'About Us - Sarkari Result',
   description: 'Know more about NewSarkariResult.co.in — your trusted platform for government job updates, results, admit cards, and educational news in India.',
   keywords: ['About Sarkari Result', 'Sarkari Result site info', 'government job portal India', 'NewSarkariResult'],
+  alternates: {
+    canonical: 'https://newsarkariresult.co.in/about',
+  },
   openGraph: {
     title: 'About Us - Sarkari Result',
     description: 'Trusted source for latest Sarkari jobs, results, admit cards, and more. Know who we are and how we help aspirants across India.',

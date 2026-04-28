@@ -26,7 +26,6 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.11.4",
     "@tailwindcss/postcss": "^4.1.11",
     "critters": "^0.0.23",
     "tailwindcss": "^4.1.11"

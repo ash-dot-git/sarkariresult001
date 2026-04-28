@@ -10,6 +10,12 @@ import ListingSearchTable from "@/components/ui/ListingSearchTable";
 import { getComprehensiveSchema } from "@/lib/getComprehensiveSchema";
 import FilterSection from '@/components/sections/FilterSection';
 
+export const metadata = {
+  alternates: {
+    canonical: 'https://newsarkariresult.co.in',
+  },
+};
+
 export default async function Page({ searchParams }) {
   searchParams = await searchParams;
   const searchQuery = searchParams?.s;

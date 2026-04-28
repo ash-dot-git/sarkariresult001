@@ -1,3 +1,5 @@
+'use client';
+
 import { AD_SLOTS } from '@/lib/adsense';
 import AdSlot from './AdSlot';
 
