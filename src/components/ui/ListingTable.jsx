@@ -6,14 +6,17 @@ export const revalidate = 30; // ISR: Refresh after 30s
 
 export default async function ListingTable({ title, category, items = 15, basePath = '' }) {
 
-  const result = await callApi('getCategoryRecords', {
-    category,
-    index: 1,
-    items,
-  });
-
-
-  const records = result?.data?.list || [];
+  let records = [];
+  try {
+    const result = await callApi('getCategoryRecords', {
+      category,
+      index: 1,
+      items,
+    });
+    records = result?.data?.list || [];
+  } catch (error) {
+    console.error(`[ListingTable] Failed to fetch records for '${category}':`, error.message);
+  }
 
   return (
     <div className='w-full min-h-[200px]'>

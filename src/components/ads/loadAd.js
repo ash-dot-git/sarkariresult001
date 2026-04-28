@@ -2,7 +2,7 @@ export function loadAd() {
   if (typeof window === 'undefined') return;
 
   try {
-    if (window.__adsenseLoaded && typeof window.adsbygoogle !== 'undefined') {
+    if (typeof window.adsbygoogle !== 'undefined') {
       window.adsbygoogle = window.adsbygoogle || [];
       window.adsbygoogle.push({});
     }

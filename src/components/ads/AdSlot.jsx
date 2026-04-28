@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { ADSENSE_CLIENT } from '@/lib/adsense';
 
 const MIN_HEIGHT_CLASS = {
@@ -22,54 +22,63 @@ export default function AdSlot({
 }) {
   const adRef = useRef(null);
   const pushedRef = useRef(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Only render <ins> on the client to prevent hydration mismatch (React #418).
+  // AdSense modifies <ins> elements in the DOM, which conflicts with React hydration.
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const tryPushAd = useCallback(() => {
-    if (!adRef.current || pushedRef.current) return;
+    if (!adRef.current || pushedRef.current) return false;
 
     try {
-      // Only push if adsbygoogle is actually defined by the SDK
       if (typeof window.adsbygoogle !== 'undefined') {
         window.adsbygoogle = window.adsbygoogle || [];
         window.adsbygoogle.push({});
         pushedRef.current = true;
+        return true;
       }
     } catch (error) {
       if (process.env.NODE_ENV !== 'production') {
-        console.warn('AdSense render failed:', error);
+        console.warn('AdSense push failed:', error);
       }
     }
+    return false;
   }, []);
 
   useEffect(() => {
-    if (!slot || !ADSENSE_CLIENT || !adRef.current) return;
+    if (!slot || !ADSENSE_CLIENT || !mounted) return;
 
-    // Reset pushed state when slot changes (e.g. route change re-mount)
+    // Reset pushed state on re-mount
     pushedRef.current = false;
 
-    // Use requestAnimationFrame to ensure the <ins> element is in the DOM
+    // Use requestAnimationFrame to ensure the <ins> element is painted
     const rafId = requestAnimationFrame(() => {
-      if (window.__adsenseLoaded) {
-        // SDK already loaded — push immediately
-        tryPushAd();
-      } else {
-        // SDK not loaded yet — listen for the custom event
-        const handleReady = () => {
-          // Small delay to ensure DOM is fully painted
-          setTimeout(tryPushAd, 100);
-        };
-        window.addEventListener('adsense-ready', handleReady, { once: true });
+      if (tryPushAd()) return; // SDK already loaded — done
 
-        // Cleanup listener if component unmounts before SDK loads
-        return () => {
-          window.removeEventListener('adsense-ready', handleReady);
-        };
-      }
+      // SDK not loaded yet — poll every 200ms for up to 10 seconds
+      let attempts = 0;
+      const maxAttempts = 50;
+      const intervalId = setInterval(() => {
+        attempts++;
+        if (tryPushAd() || attempts >= maxAttempts) {
+          clearInterval(intervalId);
+        }
+      }, 200);
+
+      // Store for cleanup
+      adRef.current._pollInterval = intervalId;
     });
 
     return () => {
       cancelAnimationFrame(rafId);
+      if (adRef.current?._pollInterval) {
+        clearInterval(adRef.current._pollInterval);
+      }
     };
-  }, [slot, tryPushAd]);
+  }, [slot, mounted, tryPushAd]);
 
   if (!slot || !ADSENSE_CLIENT) return null;
 
@@ -85,19 +94,21 @@ export default function AdSlot({
         className,
       ].join(' ')}
     >
-      <ins
-        ref={adRef}
-        className="adsbygoogle block w-full"
-        style={{
-          display: 'block',
-          ...(textAlign ? { textAlign } : {}),
-        }}
-        data-ad-client={ADSENSE_CLIENT}
-        data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive={responsive ? 'true' : 'false'}
-        {...optionalProps}
-      />
+      {mounted && (
+        <ins
+          ref={adRef}
+          className="adsbygoogle block w-full"
+          style={{
+            display: 'block',
+            ...(textAlign ? { textAlign } : {}),
+          }}
+          data-ad-client={ADSENSE_CLIENT}
+          data-ad-slot={slot}
+          data-ad-format={format}
+          data-full-width-responsive={responsive ? 'true' : 'false'}
+          {...optionalProps}
+        />
+      )}
     </div>
   );
 }
