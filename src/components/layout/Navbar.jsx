@@ -137,14 +137,14 @@ export default function Navbar() {
 
             {/* Mobile menu */}
             {isMobileMenuOpen && (
-                <div className="md:hidden bg-transparent text-white flex flex-col p-4 gap-2 z-35">
+                <div className="md:hidden bg-white text-[#05055f] flex flex-col p-4 gap-2 z-40 border-b border-gray-200 shadow-md">
                     {menuItems.map((item) => (
                         <Link
                             key={item.label}
                             href={item.href}
                             title={item.label}
                             prefetch={true}
-                            className="block hover:bg-[#982704] px-3 py-2 rounded"
+                            className="block px-3 py-2 rounded font-semibold text-[#05055f] hover:bg-[#982704] hover:text-white active:bg-[#982704] active:text-white"
                             onClick={() => setIsMobileMenuOpen(false)}
                             // style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.7)' }}
                         >
@@ -154,7 +154,7 @@ export default function Navbar() {
                         </Link>
                     ))}
                     <details className="group">
-                        <summary className="cursor-pointer px-3 py-2 rounded hover:bg-[#982704] flex items-center justify-between"> 
+                        <summary className="cursor-pointer px-3 py-2 rounded font-semibold text-[#05055f] hover:bg-[#982704] hover:text-white active:bg-[#982704] active:text-white flex items-center justify-between"> 
                             {/* style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.7)' }}> */}
                             {/* <span style={{ background: 'linear-gradient(to right, #FF9933, #000080, #138808)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}> */}
                                 More
@@ -168,7 +168,7 @@ export default function Navbar() {
                                     href={sub.href}
                                     title={sub.label}
                                     prefetch={true}
-                                    className="text-sm py-1 hover:text-red-300"
+                                    className="rounded px-3 py-2 text-sm font-semibold text-[#05055f] hover:bg-[#982704] hover:text-white active:bg-[#982704] active:text-white"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     {sub.label}

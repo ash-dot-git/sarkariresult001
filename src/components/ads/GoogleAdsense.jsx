@@ -1,5 +1,3 @@
-'use client';
+import GoogleAutoAds from './GoogleAutoAds';
 
-export default function GoogleAdsense() {
-  return null;
-}
+export default GoogleAutoAds;

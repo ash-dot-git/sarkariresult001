@@ -12,6 +12,7 @@ import { getSchemaMarkup } from '@/lib/getSchemaMarkup';
 import { getComprehensiveSchema } from '@/lib/getComprehensiveSchema';
 import FilterDisplay from '@/components/sections/FilterDisplay';
 import RelatedPosts from '@/components/sections/RelatedPosts';
+import InArticleAd from '@/components/ads/InArticleAd';
 
 export const dynamicParams = true;
 export const revalidate = 30; // ISR: Refresh after 30s
@@ -203,6 +204,7 @@ export default async function PostDetailPage({ params }) {
             title={nameOfPost}
           />
           }
+          <InArticleAd />
           {ageLimitSection && sectionComponents["Age Limit"] && (
             <AgeLimitSection elements={ageLimitSection?.elements} />
           )}

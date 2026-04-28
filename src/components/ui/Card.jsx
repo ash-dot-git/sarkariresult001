@@ -18,14 +18,20 @@ export default function Card({ title, title_slug, index }) {
   const cardClass = colorClasses[selectedColor] || 'bg-blue-600';
 
   return (
-    <div className={`rounded-lg p-1 overflow-hidden shadow-md hover:ring-2 ${cardClass} hover:bg-white hover:underline hover:text-[#e65100] active:bg-white active:text-[#e65100]`}>
-      
-        <div className="flex items-center justify-center h-16 md:h-20 lg:h-20 transform transition-transform duration-300 hover:scale-[1.05] active:scale-[1.05] active:underline">
-          <h3 className="font-semibold text-center text-sm md:text-lg lg:text-xl break-words">
-           <Link href={`/${title_slug}`} title={`${title}`} target="_blank" rel="noopener">{title}</Link>
-          </h3>
-        </div>
-      
+    <div className={`h-full rounded-lg p-1 shadow-md hover:ring-2 ${cardClass} hover:bg-white hover:text-[#e65100] active:bg-white active:text-[#e65100]`}>
+      <div className="flex min-h-[86px] items-center justify-center px-1 py-1 md:min-h-[96px] lg:min-h-[104px]">
+        <h3 className="w-full text-center text-[0.92rem] font-semibold leading-snug md:text-base lg:text-lg">
+          <Link
+            href={`/${title_slug}`}
+            title={`${title}`}
+            target="_blank"
+            rel="noopener"
+            className="block text-clamp-3 hover:underline active:underline"
+          >
+            {title}
+          </Link>
+        </h3>
+      </div>
     </div>
   );
 }

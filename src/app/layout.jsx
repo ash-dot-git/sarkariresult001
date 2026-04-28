@@ -3,7 +3,11 @@ import "./globals.css";
 import Script from "next/script";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import DynamicGoogleAutoAds from "@/components/ads/DynamicGoogleAutoAds";
+import GoogleAutoAds from "@/components/ads/GoogleAutoAds";
+import AdBottom from "@/components/ads/AdBottom";
+import LeftSideAds from "@/components/ads/LeftSideAds";
+import RightSideAds from "@/components/ads/RightSideAds";
+import { AD_SLOTS } from "@/lib/adsense";
 
 const faustina = Faustina({
   weight: ['400', '500', '600', '700', '800'],
@@ -64,7 +68,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={faustina.variable}>
-        <DynamicGoogleAutoAds />
+        <GoogleAutoAds />
         {/* Google Tag Manager */}
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-TJ22NM1MCP" strategy="afterInteractive" />
         <Script
@@ -110,14 +114,23 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        <div className="flex flex-col min-h-screen font-arial md:flex-row md:justify-center w-full">
-          <aside className="hidden lg:block lg:w-[160px] xl:w-[250px] 2xl:w-[300px] google-ads flex-shrink-0" />
+        <div className="flex flex-col min-h-screen font-arial 2xl:flex-row 2xl:justify-center w-full">
+          {AD_SLOTS.leftSide && (
+            <aside className="hidden 2xl:block 2xl:w-[260px] google-ads flex-shrink-0 px-2">
+              <LeftSideAds />
+            </aside>
+          )}
           <div className="flex-1 flex flex-col max-w-[1070px] w-full">
             <Header />
             <main className="flex-grow">{children}</main>
+            <AdBottom />
             <Footer />
           </div>
-          <aside className="hidden lg:block lg:w-[160px] xl:w-[250px] 2xl:w-[300px] google-ads flex-shrink-0" />
+          {AD_SLOTS.rightSide && (
+            <aside className="hidden 2xl:block 2xl:w-[260px] google-ads flex-shrink-0 px-2">
+              <RightSideAds />
+            </aside>
+          )}
         </div>
       </body>
     </html>

@@ -11,13 +11,13 @@ import {
 const FilterRow = ({ options, bgColor }) => {
   return (
     <div className="relative overflow-x-auto custom-scrollbar">
-      <div className="flex gap-2 p-1 md:p-2">
+      <div className="flex gap-2 px-1 py-2 md:px-2">
         {options.map((option) => (
           <Link
             key={option.key}
             href={`/sarkari-result/${option.key}`}
             title={option.label}
-            className={`relative px-2 py-1 md:p-2 rounded-md text-sm font-semibold ${bgColor} whitespace-nowrap transition-all duration-100 ease-in-out transform hover:scale-105 hover:shadow-xl  focus:outline-none focus:ring-4 focus:ring-opacity-50 shadow-md hover:-translate-y-1 active:scale-95 active:shadow-inner group`}
+            className={`relative px-2 py-1.5 leading-normal md:p-2 rounded-md text-sm font-semibold ${bgColor} whitespace-nowrap transition-all duration-100 ease-in-out hover:scale-[1.03] hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-opacity-50 shadow-md active:scale-95 active:shadow-inner group`}
           >
             {option.labelx}
             <span className="absolute inset-0  bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-100"></span>

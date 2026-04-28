@@ -1,3 +1,14 @@
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://www.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://adservice.google.com https://*.google.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.google.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data: https: blob:",
+  "connect-src 'self' https: https://*.google.com https://*.google-analytics.com https://*.googlesyndication.com https://*.doubleclick.net https://ep1.adtrafficquality.google.com https://adservice.google.com https://realm.mongodb.com",
+  "frame-src 'self' https: https://googleads.g.doubleclick.net https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com",
+  "frame-ancestors 'none'",
+].join('; ');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -21,15 +32,7 @@ const nextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: *.googlesyndication.com *.google.com *.googletagservices.com *.googletagmanager.com *.doubleclick.net *.google-analytics.com *.adservice.google.com",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com *.google.com",
-              "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: https: *.google.com *.gstatic.com *.googlesyndication.com *.doubleclick.net *.google.com.sg *.google.co.in i.ibb.co",
-              "connect-src 'self' https: *.google.com *.google-analytics.com *.googlesyndication.com *.doubleclick.net *.adservice.google.com realm.mongodb.com",
-              "frame-src 'self' https: *.google.com *.googlesyndication.com *.doubleclick.net",
-            ].join('; '),
+            value: contentSecurityPolicy,
           },
           {
             key: "Strict-Transport-Security",
@@ -49,7 +52,7 @@ const nextConfig = {
           },
           {
             key: "Cross-Origin-Opener-Policy",
-            value: "same-origin",
+            value: "same-origin-allow-popups",
           },
         ],
       },

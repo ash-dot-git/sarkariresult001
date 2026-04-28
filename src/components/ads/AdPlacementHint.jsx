@@ -1,6 +1,5 @@
-// src/components/ads/AdPlacementHint.jsx
-'use client';
+import InArticleAd from './InArticleAd';
 
 export default function AdPlacementHint() {
-  return null;
+  return <InArticleAd />;
 }
