@@ -13,14 +13,14 @@ const BASE_URL = 'https://newsarkariresult.co.in';
 export const metadata = {
   title: 'Latest Indian News | Sarkari Result',
   description:
-    'Stay updated with the latest Indian news — politics, education, jobs, government policies, and more. AI-curated news from top Indian sources, updated hourly.',
+    'Get the latest Indian news updates on politics, education, government jobs, and national events. Our AI-curated news aggregator provides fast, factual, and easy-to-read summaries from top Indian sources. Perfect for job seekers and students. Updated hourly.',
   alternates: {
     canonical: `${BASE_URL}/news`,
   },
   openGraph: {
     title: 'Latest Indian News | Sarkari Result',
     description:
-      'Stay updated with the latest Indian news — politics, education, jobs, government policies, and more.',
+      'Get the latest Indian news updates on politics, education, government jobs, and national events. Our AI-curated news aggregator provides fast, factual, and easy-to-read summaries.',
     url: `${BASE_URL}/news`,
     siteName: 'Sarkari Result',
     images: [
@@ -37,7 +37,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Latest Indian News | Sarkari Result',
-    description: 'Stay updated with the latest Indian news — politics, education, jobs, government policies, and more.',
+    description: 'Get the latest Indian news updates on politics, education, government jobs, and national events. AI-curated and updated hourly.',
     images: [`${BASE_URL}/banner.png`],
   },
 };
@@ -94,8 +94,8 @@ export default async function NewsPage() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
           Latest Indian News
         </h1>
-        <p className="mt-2 text-sm text-gray-600">
-          AI-curated news from India&apos;s top sources — updated hourly
+        <p className="mt-3 text-[0.95rem] text-gray-600 leading-relaxed max-w-4xl">
+          Stay informed with our AI-powered news aggregator, bringing you the most critical updates from India&apos;s leading publishers. We analyze, summarize, and meticulously curate the latest national, political, and employment news. By filtering out the noise, we deliver factual, easy-to-read, and comprehensive summaries tailored for students, job seekers, and busy professionals. <strong>Updated every hour</strong> to keep you ahead.
         </p>
       </header>
 
