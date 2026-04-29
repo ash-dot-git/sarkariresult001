@@ -55,8 +55,15 @@ export function getSchemaMarkup(post) {
     "datePublished": formatReadableDate(inserted, true) || new Date().toISOString()
   };
 
-  // 🎯 If it's a job type, return JobPosting schema
-  if ( category === 'latest-jobs') {
+  // 🎯 Check if the post is actually a job posting
+  const isJobPost = 
+    category === 'latest-jobs' || 
+    post.sections?.some(sec => sec?.title === 'Vacancy Details') ||
+    (exam_type && exam_type.length > 0) ||
+    ['upsc', 'ssc', 'banking', 'railway', 'police', 'defence', 'teaching', 'psu'].includes(category);
+
+  // If it's a job type, return JobPosting schema
+  if (isJobPost) {
     return {
       "@context": "https://schema.org",
       "@type": "JobPosting",
