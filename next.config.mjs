@@ -1,11 +1,11 @@
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://www.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://adservice.google.com https://*.google.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://www.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://adservice.google.com https://*.google.com https://*.adsterra.com https://*.highperformanceformat.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.google.com",
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https: blob:",
-  "connect-src 'self' https: https://*.google.com https://*.google-analytics.com https://*.googlesyndication.com https://*.doubleclick.net https://ep1.adtrafficquality.google.com https://adservice.google.com https://realm.mongodb.com",
-  "frame-src 'self' https: https://googleads.g.doubleclick.net https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com",
+  "connect-src 'self' https: https://*.google.com https://*.google-analytics.com https://*.googlesyndication.com https://*.doubleclick.net https://ep1.adtrafficquality.google.com https://adservice.google.com https://realm.mongodb.com https://*.adsterra.com https://*.highperformanceformat.com",
+  "frame-src 'self' https: https://googleads.g.doubleclick.net https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.adsterra.com https://*.highperformanceformat.com",
   "frame-ancestors 'none'",
 ].join('; ');
 
@@ -23,6 +23,30 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'i.ibb.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.indianexpress.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.ndtv.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.toiimg.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.thehindu.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'th-i.thgim.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.feedburner.com',
       },
     ],
   },

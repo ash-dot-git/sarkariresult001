@@ -5,6 +5,7 @@ import {
   minimumQualificationOptions,
   otherTagsOptions
 } from '@/data/filters';
+import { getAllSlugs } from '@/lib/newsCache';
 
 /**
  * Static pages that should always be in the sitemap.
@@ -23,6 +24,7 @@ const STATIC_PAGES = [
   { url: '/documents', changeFrequency: 'weekly', priority: 0.6 },
   { url: '/offline-form', changeFrequency: 'weekly', priority: 0.6 },
   { url: '/sarkari-result', changeFrequency: 'daily', priority: 0.9 },
+  { url: '/news', changeFrequency: 'hourly', priority: 0.9 },
   { url: '/about', changeFrequency: 'monthly', priority: 0.4 },
   { url: '/contact', changeFrequency: 'monthly', priority: 0.4 },
   { url: '/privacy-policy', changeFrequency: 'yearly', priority: 0.3 },
@@ -80,9 +82,21 @@ export default async function sitemap() {
     priority: 0.7,
   }));
 
+  // News article pages from MongoDB
+  const newsSlugs = await getAllSlugs();
+  const newsPages = newsSlugs
+    .filter((item) => item.slug)
+    .map((item) => ({
+      url: `${BASE_URL}/news/${item.slug}`,
+      lastModified: item.generatedAt || new Date().toISOString(),
+      changeFrequency: 'daily',
+      priority: 0.8,
+    }));
+
   return [
     ...staticPages,
     ...categoryPages,
     ...posts,
+    ...newsPages,
   ];
 }
