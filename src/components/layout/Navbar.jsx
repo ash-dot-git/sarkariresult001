@@ -12,6 +12,7 @@ const SearchModal = dynamic(() => import("../modals/SearchModal"), {
 
 const menuItems = [
     { label: "Home", href: "/" },
+    { label: "News", href: "/news" },
     { label: "Latest Job", href: "/latest-jobs" },
     { label: "Admit Card", href: "/admit-cards" },
     { label: "Result", href: "/result" },
