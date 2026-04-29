@@ -79,7 +79,7 @@ export default async function SarkariResultCategoryPage({ params }) {
   };
 
   const schema = getComprehensiveSchema({
-    pageType: 'WebPage',
+    pageType: 'CollectionPage',
     url: pageUrl,
     title: data.title,
     description: data.description,

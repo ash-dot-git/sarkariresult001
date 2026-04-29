@@ -70,10 +70,26 @@ export default async function NewsPage() {
 
   return (
     <div className="w-full px-2 sm:px-4 py-6">
-      {/* Breadcrumb Schema */}
+      {/* Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': ['WebPage', 'CollectionPage'],
+            '@id': `${BASE_URL}/news`,
+            url: `${BASE_URL}/news`,
+            name: 'Latest Indian News',
+            description: 'Get the latest Indian news updates on politics, education, government jobs, and national events.',
+            isPartOf: {
+              '@id': `${BASE_URL}/#website`
+            }
+          })
+        }}
       />
 
       {/* Breadcrumb Navigation */}

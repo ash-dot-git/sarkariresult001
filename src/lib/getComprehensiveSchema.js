@@ -11,7 +11,9 @@ export function getComprehensiveSchema({
   faqSchema,
 }) {
   const webPage = {
-    '@type': pageType === 'SearchResultsPage' ? ['WebPage', 'SearchResultsPage'] : 'WebPage',
+    '@type': pageType === 'SearchResultsPage' ? ['WebPage', 'SearchResultsPage'] : 
+             pageType === 'CollectionPage' ? ['WebPage', 'CollectionPage'] :
+             'WebPage',
     '@id': url,
     url: url,
     name: title,

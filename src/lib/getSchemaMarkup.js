@@ -102,26 +102,17 @@ export function getSchemaMarkup(post) {
     };
   }
 
-  // ✳️ Syllabus-specific schema
-  if (category === 'syllabus') {
+  // 🎓 Course schema for Syllabus and Admissions (officially supported GSC Enhancement)
+  if (category === 'syllabus' || category === 'admission') {
     return {
-      ...baseArticle,
-      "@type": "CreativeWork",
-      "about": title
-    };
-  }
-
-  // 🎓 Admissions-specific schema
-  if (category === 'admission') {
-    return {
-      ...baseArticle,
-      "@type": "EducationalOccupationalProgram",
-      "educationalProgramMode": "online",
+      "@context": "https://schema.org",
+      "@type": "Course",
       "name": title,
-      "description": short_information,
+      "description": short_information || `Details about ${title}`,
       "provider": {
         "@type": "Organization",
-        "name": "Sarkari Result"
+        "name": "Sarkari Result",
+        "sameAs": "https://newsarkariresult.co.in"
       }
     };
   }
