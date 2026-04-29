@@ -44,18 +44,31 @@ const CONNECTION_OPTIONS = {
   retryReads: true,
 };
 
-/** @type {Promise<MongoClient> | null} */
-let clientPromise = null;
+let clientPromise;
 
-export async function getClient() {
+if (process.env.NODE_ENV === 'development') {
+  // In development mode, use a global variable so that the value
+  // is preserved across module reloads caused by HMR (Hot Module Replacement).
+  if (!global._mongoClientPromise) {
+    const client = new MongoClient(MONGODB_URI, CONNECTION_OPTIONS);
+    global._mongoClientPromise = client.connect().catch(err => {
+      global._mongoClientPromise = null;
+      throw err;
+    });
+  }
+  clientPromise = global._mongoClientPromise;
+} else {
+  // In production mode, it's best to not use a global variable.
   if (!clientPromise) {
     const client = new MongoClient(MONGODB_URI, CONNECTION_OPTIONS);
     clientPromise = client.connect().catch(err => {
-      // Clear the promise so the next request tries again
       clientPromise = null;
       throw err;
     });
   }
+}
+
+export async function getClient() {
   return clientPromise;
 }
 

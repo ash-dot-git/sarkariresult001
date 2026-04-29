@@ -28,8 +28,13 @@ export async function generateStaticParams() {
 }
 
 const getPostData = cache(async (slug) => {
-  const postData = await callApi('getRecordDetails', { title_slug: slug });
-  return postData?.data;
+  try {
+    const postData = await callApi('getRecordDetails', { title_slug: slug });
+    return postData?.data;
+  } catch (error) {
+    // Return null so that generateMetadata and PostDetailPage can call notFound()
+    return null;
+  }
 });
 
 export async function generateMetadata({ params }) {
