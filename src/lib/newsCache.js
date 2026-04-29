@@ -153,32 +153,62 @@ export async function isCacheStale(maxAgeMinutes = 60) {
 }
 
 /**
- * Gets articles by category for "Related News" feature.
- * @param {string} category - Category to filter by
- * @param {string} [excludeSlug] - Slug to exclude (current article)
+ * Gets related articles for the "Related News" feature.
+ * Prioritizes articles with overlapping trendingTags, then same category, then random.
+ * Uses $sample to ensure variety so the same newest articles aren't repeated.
+ * 
+ * @param {Object} article - The current article object
  * @param {number} [limit=3] - Max articles to return
  * @returns {Promise<Array<Object>>}
  */
-export async function getRelatedArticles(category, excludeSlug, limit = 3) {
+export async function getRelatedArticles(article, limit = 3) {
   try {
     const collection = await getCollection(COLLECTION_NAME);
-    const articles = await collection
-      .find({ category, slug: { $ne: excludeSlug } })
-      .sort({ pubDate: -1 })
-      .limit(limit)
-      .toArray();
+    const excludeSlug = article.slug;
+    
+    let articles = [];
+    const existingSlugs = new Set([excludeSlug]);
 
-    // If not enough from same category, fill with latest from any category
-    if (articles.length < limit) {
-      const fillerSlugs = [excludeSlug, ...articles.map(a => a.slug)];
-      const fillers = await collection
-        .find({ slug: { $nin: fillerSlugs } })
-        .sort({ pubDate: -1 })
-        .limit(limit - articles.length)
-        .toArray();
-      articles.push(...fillers);
+    // Helper to safely add articles
+    const addArticles = (newArticles) => {
+      for (const a of newArticles) {
+        if (!existingSlugs.has(a.slug) && articles.length < limit) {
+          articles.push(a);
+          existingSlugs.add(a.slug);
+        }
+      }
+    };
+
+    // 1. Try to find articles with overlapping tags (highest relevance)
+    if (article.trendingTags && article.trendingTags.length > 0) {
+      const tagMatches = await collection.aggregate([
+        { $match: { slug: { $ne: excludeSlug }, trendingTags: { $in: article.trendingTags } } },
+        { $sample: { size: limit } }
+      ]).toArray();
+      addArticles(tagMatches);
     }
 
+    // 2. Fill with same category (moderate relevance)
+    if (articles.length < limit && article.category) {
+      const needed = limit - articles.length;
+      const categoryMatches = await collection.aggregate([
+        { $match: { category: article.category, slug: { $nin: Array.from(existingSlugs) } } },
+        { $sample: { size: needed } }
+      ]).toArray();
+      addArticles(categoryMatches);
+    }
+
+    // 3. Fallback: random articles from any category
+    if (articles.length < limit) {
+      const needed = limit - articles.length;
+      const randomMatches = await collection.aggregate([
+        { $match: { slug: { $nin: Array.from(existingSlugs) } } },
+        { $sample: { size: needed } }
+      ]).toArray();
+      addArticles(randomMatches);
+    }
+
+    // Remove MongoDB _id field
     return articles.map(({ _id, ...rest }) => rest);
   } catch (error) {
     console.warn('⚠️ Failed to get related articles:', error.message);

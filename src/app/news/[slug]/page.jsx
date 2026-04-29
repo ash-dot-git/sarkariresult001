@@ -119,8 +119,8 @@ export default async function NewsArticlePage({ params }) {
   const paragraphs = splitParagraphs(article.articleBody);
   const formattedDate = formatDate(article.pubDate);
 
-  // Related articles from MongoDB (same category, fills from other categories if needed)
-  const relatedArticles = await getRelatedArticles(article.category, slug, 3);
+  // Related articles from MongoDB (prioritizes overlapping tags, then category, randomized)
+  const relatedArticles = await getRelatedArticles(article, 3);
 
   /** NewsArticle JSON-LD schema */
   const articleSchema = {
