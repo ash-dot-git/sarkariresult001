@@ -52,7 +52,7 @@ export default async function sitemap() {
     }
 
     return {
-      url: `${BASE_URL}/${node.title_slug}`,
+      url: `${BASE_URL}/${encodeURIComponent(node.title_slug)}`,
       lastModified: lastModified.toISOString(),
       changeFrequency: 'daily',
       priority: 0.8,
@@ -76,7 +76,7 @@ export default async function sitemap() {
   ];
 
   const categoryPages = allFilters.map((filter) => ({
-    url: `${BASE_URL}/sarkari-result/${filter.key}`,
+    url: `${BASE_URL}/sarkari-result/${encodeURIComponent(filter.key)}`,
     lastModified: new Date().toISOString(),
     changeFrequency: 'daily',
     priority: 0.7,
@@ -87,7 +87,7 @@ export default async function sitemap() {
   const newsPages = newsSlugs
     .filter((item) => item.slug)
     .map((item) => ({
-      url: `${BASE_URL}/news/${item.slug}`,
+      url: `${BASE_URL}/news/${encodeURIComponent(item.slug)}`,
       lastModified: item.generatedAt || new Date().toISOString(),
       changeFrequency: 'daily',
       priority: 0.8,
