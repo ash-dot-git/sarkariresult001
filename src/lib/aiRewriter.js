@@ -33,9 +33,8 @@ Return exactly this JSON structure:
   "articleBody": "string — 500 word rewrite in professional journalistic tone. Use clear paragraphs separated by \\n\\n. Cover all key facts from the original.",
   "trendingTags": ["array of 8-10 trending hashtag-style tags relevant to Indian audience"],
   "faqSection": [
-    {"question": "string", "answer": "string"},
-    {"question": "string", "answer": "string"},
-    {"question": "string", "answer": "string"}
+    {"question": "string — Realistic question an aspirant/student would ask about this", "answer": "string — Detailed, helpful answer based on the article"},
+    // Must generate exactly 3 to 5 high-quality, relevant FAQs.
   ],
   "schemaType": "NewsArticle or Article"
 }
@@ -45,7 +44,7 @@ Rules:
 - Include relevant Indian context and perspectives
 - Make the content 100% unique — do not copy from the original
 - Tags should be trending Indian topics related to the article
-- FAQs should be genuinely helpful questions readers would ask
+- MUST generate 3 to 5 realistic, context-specific FAQs that genuinely help students, aspirants, or professionals understand the news. Do NOT use generic questions.
 - The articleBody must be at least 400 words
 - Return ONLY the JSON object, nothing else`;
 }
@@ -141,12 +140,11 @@ function createFallback(article) {
  * @param {string} article.title - Original title
  * @param {string} article.description - Original description/excerpt
  * @param {string} article.link - Source URL
- * @param {string} article.pubDate - Publication date
- * @param {string} article.category - Category
+ * @param {string} [customApiKey] - Optional API key provided by the admin to bypass environment limits
  * @returns {Promise<{seoTitle: string, metaDescription: string, h1: string, articleBody: string, trendingTags: string[], faqSection: Array<{question: string, answer: string}>, schemaType: string}>}
  */
-export async function rewriteArticle(article) {
-  const apiKey = process.env.GEMINI_API_KEY;
+export async function rewriteArticle(article, customApiKey = null) {
+  const apiKey = customApiKey || process.env.GEMINI_API_KEY;
 
   if (!apiKey || apiKey === 'your_gemini_api_key_here') {
     console.warn('⚠️ GEMINI_API_KEY not configured — using fallback content');

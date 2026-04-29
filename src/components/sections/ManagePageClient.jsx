@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import UpdateRecordForm from '@/components/sections/UpdateRecordForm';
 import AdminLogin from '@/components/ui/AdminLogin';
 import { Search, X } from 'lucide-react';
@@ -230,13 +231,18 @@ export default function ManagePageClient() {
           <div className="mb-8 p-4 bg-white rounded-xl shadow-lg">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-              <button
-                onClick={handleAddNew}
-                className="bg-blue-900 text-white cursor-pointer py-2 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-transform transform hover:scale-105"
-                aria-label="Add new record"
-              >
-                + Add New Record
-              </button>
+              <div className="flex gap-4">
+                <Link href="/admin/manage/news" className="bg-green-600 text-white py-2 px-6 rounded-lg text-lg font-semibold hover:bg-green-700 transition-colors cursor-pointer">
+                  Manage News
+                </Link>
+                <button
+                  onClick={handleAddNew}
+                  className="bg-blue-900 text-white cursor-pointer py-2 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-transform transform hover:scale-105"
+                  aria-label="Add new record"
+                >
+                  + Add New Record
+                </button>
+              </div>
             </div>
             <div className="mt-4 border-t pt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
