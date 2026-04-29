@@ -128,11 +128,7 @@ function createFallback(article) {
     h1: article.title || 'Latest News Update',
     articleBody,
     trendingTags: ['#IndiaNews', '#SarkariResult', '#LatestNews', '#BreakingNews', '#IndianNews', '#TodayNews', '#NewsUpdate', '#India'],
-    faqSection: [
-      { question: 'What is "' + shortTitle + '" about?', answer: article.description || 'This article covers the latest developments in Indian news. Read the full article above for complete details.' },
-      { question: 'When was this reported?', answer: 'This news was reported ' + (article.pubDate ? 'on ' + article.pubDate : 'recently') + ' by ' + (article.source || 'Indian news sources') + '.' },
-      { question: 'Where can I find more details?', answer: 'For the original report, visit ' + (article.source || 'the source publication') + '. For more Indian news updates, stay tuned to newsarkariresult.co.in.' },
-    ],
+    faqSection: [], // Avoid generating repetitive generic FAQs when AI fails
     schemaType: 'NewsArticle',
   };
 }
