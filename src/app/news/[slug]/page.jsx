@@ -158,7 +158,7 @@ export default async function NewsArticlePage({ params }) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: 'News', item: `${BASE_URL}/news` },
+      { '@type': 'ListItem', position: 2, name: 'Jobs News', item: `${BASE_URL}/news` },
       { '@type': 'ListItem', position: 3, name: title, item: canonicalUrl },
     ],
   };
@@ -183,7 +183,7 @@ export default async function NewsArticlePage({ params }) {
           </li>
           <li className="flex items-center gap-1.5">
             <span>/</span>
-            <Link href="/news" className="hover:text-red-700 transition-colors">News</Link>
+            <Link href="/news" className="hover:text-red-700 transition-colors">Jobs News</Link>
           </li>
           <li className="flex items-center gap-1.5">
             <span>/</span>
@@ -289,7 +289,7 @@ export default async function NewsArticlePage({ params }) {
       {relatedArticles.length > 0 && (
         <section className="mt-8 pt-6 border-t border-gray-200" aria-labelledby="related-heading">
           <h2 id="related-heading" className="text-xl font-bold text-gray-900 mb-4">
-            Related News
+            Related Jobs News
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {relatedArticles.map((related) => (

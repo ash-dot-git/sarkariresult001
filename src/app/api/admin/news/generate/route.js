@@ -55,6 +55,13 @@ export async function POST(request) {
 
       try {
         const rewritten = await rewriteArticle(article, customApiKey);
+
+        // AI determined this article is not job-related — skip it
+        if (rewritten === null) {
+          skipCount++;
+          continue;
+        }
+
         const slug = toSlug(rewritten.seoTitle || article.title);
 
         if (!slug) {

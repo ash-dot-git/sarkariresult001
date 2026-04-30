@@ -1,32 +1,41 @@
 /**
  * @module rss
- * @description Fetches and parses RSS feeds from major Indian news sources.
+ * @description Fetches and parses RSS feeds from Indian jobs and employment news sources.
  * Returns a deduplicated array of article objects (max 50).
  */
 
 import xml2js from 'xml2js';
 
-/** RSS feed URLs for top Indian news sources */
+/** RSS feed URLs for Indian jobs/employment/education news sources */
 const RSS_FEEDS = [
   {
-    name: 'Indian Express',
-    url: 'https://indianexpress.com/section/india/feed/',
+    name: 'Indian Express Jobs',
+    url: 'https://indianexpress.com/about/jobs/feed/',
   },
   {
-    name: 'NDTV',
-    url: 'https://feeds.feedburner.com/ndtvnews-india-news',
+    name: 'NDTV Jobs',
+    url: 'https://feeds.feedburner.com/ndtvnews-jobs-news',
   },
   {
-    name: 'Times of India',
-    url: 'https://timesofindia.indiatimes.com/rssfeedstopstories.cms',
+    name: 'Times of India Education',
+    url: 'https://timesofindia.indiatimes.com/rssfeeds/913168846.cms',
   },
   {
-    name: 'The Hindu',
-    url: 'https://www.thehindu.com/news/national/feeder/default.rss',
+    name: 'The Hindu Education',
+    url: 'https://www.thehindu.com/education/feeder/default.rss',
+  },
+  {
+    name: 'Indian Express Education',
+    url: 'https://indianexpress.com/section/education/feed/',
+  },
+  {
+    name: 'NDTV Education',
+    url: 'https://feeds.feedburner.com/ndtvnews-education-news',
   },
 ];
 
 const MAX_ARTICLES = 50;
+
 
 /**
  * Extracts the first image URL from an RSS item.

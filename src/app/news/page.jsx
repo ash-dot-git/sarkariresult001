@@ -11,16 +11,16 @@ const BASE_URL = 'https://newsarkariresult.co.in';
  * SEO metadata for the news listing page.
  */
 export const metadata = {
-  title: 'Latest Indian News | Sarkari Result',
+  title: 'Jobs News | Sarkari Result - Government Jobs & Recruitment Updates',
   description:
-    'Get the latest Indian news updates on politics, education, government jobs, and national events. Our AI-curated news aggregator provides fast, factual, and easy-to-read summaries from top Indian sources. Perfect for job seekers and students. Updated hourly.',
+    'Get the latest government jobs news, recruitment updates, exam notifications, and employment alerts. Our AI-curated jobs news brings you fast, factual summaries on Sarkari Naukri, SSC, UPSC, Railway, Banking, and more. Updated hourly for job seekers and students.',
   alternates: {
     canonical: `${BASE_URL}/news`,
   },
   openGraph: {
-    title: 'Latest Indian News | Sarkari Result',
+    title: 'Jobs News | Sarkari Result - Government Jobs & Recruitment Updates',
     description:
-      'Get the latest Indian news updates on politics, education, government jobs, and national events. Our AI-curated news aggregator provides fast, factual, and easy-to-read summaries.',
+      'Get the latest government jobs news, recruitment updates, and employment alerts. AI-curated summaries on Sarkari Naukri, exam results, and career opportunities.',
     url: `${BASE_URL}/news`,
     siteName: 'Sarkari Result',
     images: [
@@ -28,7 +28,7 @@ export const metadata = {
         url: `${BASE_URL}/banner.png`,
         width: 1200,
         height: 630,
-        alt: 'Latest Indian News - Sarkari Result',
+        alt: 'Jobs News - Sarkari Result',
       },
     ],
     locale: 'en_IN',
@@ -36,8 +36,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Latest Indian News | Sarkari Result',
-    description: 'Get the latest Indian news updates on politics, education, government jobs, and national events. AI-curated and updated hourly.',
+    title: 'Jobs News | Sarkari Result - Government Jobs & Recruitment Updates',
+    description: 'Get the latest government jobs news, recruitment updates, and employment alerts. AI-curated and updated hourly.',
     images: [`${BASE_URL}/banner.png`],
   },
 };
@@ -62,7 +62,7 @@ export default async function NewsPage() {
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'News',
+        name: 'Jobs News',
         item: `${BASE_URL}/news`,
       },
     ],
@@ -83,8 +83,8 @@ export default async function NewsPage() {
             '@type': ['WebPage', 'CollectionPage'],
             '@id': `${BASE_URL}/news`,
             url: `${BASE_URL}/news`,
-            name: 'Latest Indian News',
-            description: 'Get the latest Indian news updates on politics, education, government jobs, and national events.',
+            name: 'Jobs News - Government Jobs & Recruitment Updates',
+            description: 'Get the latest government jobs news, recruitment updates, exam notifications, and employment alerts.',
             isPartOf: {
               '@id': `${BASE_URL}/#website`
             }
@@ -100,7 +100,7 @@ export default async function NewsPage() {
           </li>
           <li className="flex items-center gap-1.5">
             <span>/</span>
-            <span className="font-semibold text-gray-900">News</span>
+            <span className="font-semibold text-gray-900">Jobs News</span>
           </li>
         </ol>
       </nav>
@@ -108,10 +108,10 @@ export default async function NewsPage() {
       {/* Page Header */}
       <header className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
-          Latest Indian News
+          Jobs News
         </h1>
         <p className="mt-3 text-[0.95rem] text-gray-600 leading-relaxed max-w-4xl">
-          Stay informed with our AI-powered news aggregator, bringing you the most critical updates from India&apos;s leading publishers. We analyze, summarize, and meticulously curate the latest national, political, and employment news. By filtering out the noise, we deliver factual, easy-to-read, and comprehensive summaries tailored for students, job seekers, and busy professionals. <strong>Updated every hour</strong> to keep you ahead.
+          Stay informed with our AI-powered jobs news aggregator, bringing you the most critical recruitment and employment updates from India&apos;s leading publishers. We analyze, summarize, and curate the latest government job notifications, exam results, admit cards, and career opportunities. Tailored for students, job seekers, and government exam aspirants. <strong>Updated every hour</strong> to keep you ahead.
         </p>
       </header>
 

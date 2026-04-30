@@ -41,12 +41,18 @@ export default async function Page({ searchParams }) {
     );
   }
 
-  const upcomingPostsData = await callApi('getCategoryRecords', {
-    category: 'upcoming',
-    index: 1,
-    items: 10,
-  });
-  const upcomingPosts = upcomingPostsData?.data?.list || [];
+  let upcomingPosts = [];
+  try {
+    const upcomingPostsData = await callApi('getCategoryRecords', {
+      category: 'upcoming',
+      index: 1,
+      items: 10,
+    });
+    upcomingPosts = upcomingPostsData?.data?.list || [];
+  } catch (error) {
+    console.error('[HomePage] Failed to fetch upcoming posts:', error.message);
+    // Gracefully degrade — render the page without the upcoming scroller
+  }
 
   return (
     <main className="w-full flex flex-col py-6">

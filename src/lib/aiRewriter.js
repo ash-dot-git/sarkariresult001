@@ -1,21 +1,32 @@
 /**
  * @module aiRewriter
- * @description Uses Google Gemini API (free tier) to rewrite news articles
- * into unique SEO-optimized content with trending tags and FAQs.
+ * @description Uses Google Gemini API (free tier) to rewrite jobs & employment
+ * news articles into unique SEO-optimized content with trending tags and FAQs.
  */
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 /**
- * Builds the prompt for Gemini to rewrite articles.
+ * Builds the prompt for Gemini to rewrite job/employment articles.
  * @param {Object} article
  * @returns {string}
  */
 function buildPrompt(article) {
   const contentText = article.fullContent || article.description || '';
-  return `You are an expert SEO journalist and content writer for an Indian news and government jobs portal called "Sarkari Result" (newsarkariresult.co.in).
+  return `You are an expert SEO journalist and content writer for an Indian government jobs and recruitment portal called "Sarkari Result" (newsarkariresult.co.in).
 
-Rewrite this news article into unique, engaging, SEO-optimized content. Return ONLY valid JSON — no markdown, no code blocks, no explanation text before or after.
+Your ONLY focus is on content related to:
+- Government jobs and Sarkari Naukri
+- Recruitment notifications (SSC, UPSC, Railway, Banking, State PSC, Defence, Police, etc.)
+- Exam results, admit cards, answer keys, and cutoff marks
+- Education news (university admissions, board results, entrance exams, scholarships)
+- Employment policies, salary revisions, DA announcements, pension updates
+- Skill development and career guidance for Indian youth
+
+If the article below is NOT related to jobs, recruitment, education, or employment, return this exact JSON:
+{"skip": true, "reason": "Not related to jobs/employment"}
+
+Otherwise, rewrite this article into unique, engaging, SEO-optimized content. Return ONLY valid JSON — no markdown, no code blocks, no explanation text.
 
 Original Article:
 Title: ${article.title}
@@ -27,24 +38,25 @@ Source: ${article.link}
 
 Return exactly this JSON structure:
 {
-  "seoTitle": "string under 60 characters — SEO-optimized title",
-  "metaDescription": "string of 150-160 characters — compelling meta description",
-  "h1": "string — engaging, click-worthy headline",
-  "articleBody": "string — 500 word rewrite in professional journalistic tone. Use clear paragraphs separated by \\n\\n. Cover all key facts from the original.",
-  "trendingTags": ["array of 8-10 trending hashtag-style tags relevant to Indian audience"],
+  "seoTitle": "string under 60 characters — SEO-optimized title with job/recruitment keywords",
+  "metaDescription": "string of 150-160 characters — compelling meta description for job seekers",
+  "h1": "string — engaging, click-worthy headline about the job/recruitment/education topic",
+  "articleBody": "string — 500 word rewrite in professional journalistic tone. Use clear paragraphs separated by \\n\\n. Cover all key facts: vacancies, eligibility, important dates, application process, salary details if available.",
+  "trendingTags": ["array of 8-10 trending hashtag-style tags relevant to Indian job seekers e.g. #SarkariNaukri, #SSC, #UPSC, #GovtJobs, #Recruitment2025"],
   "faqSection": [
-    {"question": "string — Realistic question an aspirant/student would ask about this", "answer": "string — Detailed, helpful answer based on the article"},
-    // Must generate exactly 3 to 5 high-quality, relevant FAQs.
+    {"question": "string — Practical question a job aspirant/student would ask", "answer": "string — Detailed, helpful answer based on the article"},
+    // Must generate exactly 3 to 5 high-quality, relevant FAQs about eligibility, dates, process, etc.
   ],
   "schemaType": "NewsArticle or Article"
 }
 
 Rules:
 - Write in clear, professional English
-- Include relevant Indian context and perspectives
+- Focus on information useful to job seekers, students, and government exam aspirants
+- Include key details: number of vacancies, eligibility criteria, important dates, application links, salary
 - Make the content 100% unique — do not copy from the original
-- Tags should be trending Indian topics related to the article
-- MUST generate 3 to 5 realistic, context-specific FAQs that genuinely help students, aspirants, or professionals understand the news. Do NOT use generic questions.
+- Tags should be trending Indian job/recruitment topics related to the article
+- MUST generate 3 to 5 realistic, job-specific FAQs that help aspirants understand the opportunity
 - The articleBody must be at least 400 words
 - Return ONLY the JSON object, nothing else`;
 }
@@ -113,20 +125,20 @@ function createFallback(article) {
     articleBody = title + '\n\n' +
       (desc ? desc + '\n\n' : '') +
       'This story was originally reported by ' + source + ' on ' + date + '. ' +
-      'The development pertains to the ' + category + ' sector and has drawn significant attention from readers across India.\n\n' +
+      'The development pertains to the ' + category + ' sector and has drawn significant attention from job seekers across India.\n\n' +
       'For more details and the original coverage, readers can visit the source publication. ' +
-      'Stay tuned to Sarkari Result (newsarkariresult.co.in) for continued updates on this and other important news from India.\n\n' +
-      'This article is part of our AI-curated news section that brings you the most important stories from leading Indian publications including Indian Express, NDTV, Times of India, and The Hindu.';
+      'Stay tuned to Sarkari Result (newsarkariresult.co.in) for continued updates on government jobs, recruitment, and education news.\n\n' +
+      'This article is part of our AI-curated jobs news section that brings you the most important employment and education stories from leading Indian publications.';
   }
 
   const shortTitle = (article.title || 'this news').substring(0, 80);
 
   return {
-    seoTitle: (article.title || 'News Update').substring(0, 60),
-    metaDescription: (article.description || article.title || 'Latest news update from India').substring(0, 160),
-    h1: article.title || 'Latest News Update',
+    seoTitle: (article.title || 'Jobs News Update').substring(0, 60),
+    metaDescription: (article.description || article.title || 'Latest government jobs and recruitment update from India').substring(0, 160),
+    h1: article.title || 'Latest Jobs News Update',
     articleBody,
-    trendingTags: ['#IndiaNews', '#SarkariResult', '#LatestNews', '#BreakingNews', '#IndianNews', '#TodayNews', '#NewsUpdate', '#India'],
+    trendingTags: ['#SarkariNaukri', '#SarkariResult', '#GovtJobs', '#Recruitment2025', '#JobsNews', '#SarkariExam', '#LatestJobs', '#IndiaJobs'],
     faqSection: [], // Avoid generating repetitive generic FAQs when AI fails
     schemaType: 'NewsArticle',
   };
@@ -187,6 +199,12 @@ export async function rewriteArticle(article, customApiKey = null) {
     }
 
     const parsed = extractJSON(content);
+
+    // Check if AI determined article is not job-related
+    if (parsed.skip === true) {
+      console.log(`⏩ Skipping non-job article: "${article.title?.substring(0, 50)}..." — ${parsed.reason || 'not relevant'}`);
+      return null; // Signal to caller to skip this article
+    }
 
     // Validate required fields
     if (!parsed.seoTitle || !parsed.articleBody) {

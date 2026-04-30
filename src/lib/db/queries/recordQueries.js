@@ -1,4 +1,4 @@
-import { getCollection } from '../connection.js';
+import { getCollection, withRetry } from '../connection.js';
 
 /**
  * Record Queries — Pure Database Access Layer (Repository Pattern)
@@ -38,46 +38,48 @@ async function collection() {
  * @returns {Promise<{list: object[], count: number}>}
  */
 export async function findAllRecords({ searchTerm = '', skip = 0, limit = 25, categories = [] } = {}) {
-  const col = await collection();
+  return withRetry(async () => {
+    const col = await collection();
 
-  // Base filter: only published, non-draft records
-  const filter = { pendingForm: { $ne: true } };
+    // Base filter: only published, non-draft records
+    const filter = { pendingForm: { $ne: true } };
 
-  // Apply category filter if specified
-  if (categories.length > 0) {
-    filter.category = { $in: categories };
-  }
+    // Apply category filter if specified
+    if (categories.length > 0) {
+      filter.category = { $in: categories };
+    }
 
-  // Apply text search if a search term is provided
-  if (searchTerm.trim()) {
-    filter.$or = [
-      { title: { $regex: searchTerm, $options: 'i' } },
-      { description: { $regex: searchTerm, $options: 'i' } },
-    ];
-  }
+    // Apply text search if a search term is provided
+    if (searchTerm.trim()) {
+      filter.$or = [
+        { title: { $regex: searchTerm, $options: 'i' } },
+        { description: { $regex: searchTerm, $options: 'i' } },
+      ];
+    }
 
-  // Run count and find in parallel for better performance
-  const [count, list] = await Promise.all([
-    col.countDocuments(filter),
-    col.find(filter)
-      .sort({ updated: -1 })
-      .skip(skip)
-      .limit(limit)
-      .project({
-        _id: 0,
-        title: 1,
-        title_slug: 1,
-        category: 1,
-        description: 1,
-        show: 1,
-        unique_id: 1,
-        inserted: 1,
-        updated: 1,
-      })
-      .toArray(),
-  ]);
+    // Run count and find in parallel for better performance
+    const [count, list] = await Promise.all([
+      col.countDocuments(filter),
+      col.find(filter)
+        .sort({ updated: -1 })
+        .skip(skip)
+        .limit(limit)
+        .project({
+          _id: 0,
+          title: 1,
+          title_slug: 1,
+          category: 1,
+          description: 1,
+          show: 1,
+          unique_id: 1,
+          inserted: 1,
+          updated: 1,
+        })
+        .toArray(),
+    ]);
 
-  return { list, count };
+    return { list, count };
+  });
 }
 
 /**
@@ -87,11 +89,13 @@ export async function findAllRecords({ searchTerm = '', skip = 0, limit = 25, ca
  * @returns {Promise<object|null>} The full document, or null if not found.
  */
 export async function findRecordBySlug(slug) {
-  const col = await collection();
-  return col.findOne(
-    { title_slug: slug },
-    { projection: { _id: 0 } }
-  );
+  return withRetry(async () => {
+    const col = await collection();
+    return col.findOne(
+      { title_slug: slug },
+      { projection: { _id: 0 } }
+    );
+  });
 }
 
 /**
@@ -105,38 +109,40 @@ export async function findRecordBySlug(slug) {
  * @returns {Promise<{list: object[], count: number}>}
  */
 export async function findRecordsByCategory({ category, skip = 0, limit = 25, exclude = '' } = {}) {
-  const col = await collection();
+  return withRetry(async () => {
+    const col = await collection();
 
-  const filter = {
-    category,
-    pendingForm: { $ne: true },
-  };
+    const filter = {
+      category,
+      pendingForm: { $ne: true },
+    };
 
-  // Exclude a specific record (used by RelatedPosts to avoid showing same post)
-  if (exclude) {
-    filter.title_slug = { $ne: exclude };
-  }
+    // Exclude a specific record (used by RelatedPosts to avoid showing same post)
+    if (exclude) {
+      filter.title_slug = { $ne: exclude };
+    }
 
-  const [count, list] = await Promise.all([
-    col.countDocuments(filter),
-    col.find(filter)
-      .sort({ updated: -1 })
-      .skip(skip)
-      .limit(limit)
-      .project({
-        _id: 0,
-        title: 1,
-        title_slug: 1,
-        category: 1,
-        show: 1,
-        unique_id: 1,
-        inserted: 1,
-        updated: 1,
-      })
-      .toArray(),
-  ]);
+    const [count, list] = await Promise.all([
+      col.countDocuments(filter),
+      col.find(filter)
+        .sort({ updated: -1 })
+        .skip(skip)
+        .limit(limit)
+        .project({
+          _id: 0,
+          title: 1,
+          title_slug: 1,
+          category: 1,
+          show: 1,
+          unique_id: 1,
+          inserted: 1,
+          updated: 1,
+        })
+        .toArray(),
+    ]);
 
-  return { list, count };
+    return { list, count };
+  });
 }
 
 /**
@@ -151,40 +157,42 @@ export async function findRecordsByCategory({ category, skip = 0, limit = 25, ex
  * @returns {Promise<{list: object[], count: number}>}
  */
 export async function findRecordsByFilter({ filterKey, skip = 0, limit = 50 } = {}) {
-  const col = await collection();
+  return withRetry(async () => {
+    const col = await collection();
 
-  // Search across all filter arrays for the filter key
-  const filter = {
-    pendingForm: { $ne: true },
-    $or: [
-      { category: filterKey },
-      { 'filters.exam_type': filterKey },
-      { 'filters.applicable_states': filterKey },
-      { 'filters.minimum_qualification': filterKey },
-      { 'filters.other_tags': filterKey },
-    ],
-  };
+    // Search across all filter arrays for the filter key
+    const filter = {
+      pendingForm: { $ne: true },
+      $or: [
+        { category: filterKey },
+        { 'filters.exam_type': filterKey },
+        { 'filters.applicable_states': filterKey },
+        { 'filters.minimum_qualification': filterKey },
+        { 'filters.other_tags': filterKey },
+      ],
+    };
 
-  const [count, list] = await Promise.all([
-    col.countDocuments(filter),
-    col.find(filter)
-      .sort({ updated: -1 })
-      .skip(skip)
-      .limit(limit)
-      .project({
-        _id: 0,
-        title: 1,
-        title_slug: 1,
-        category: 1,
-        show: 1,
-        unique_id: 1,
-        inserted: 1,
-        updated: 1,
-      })
-      .toArray(),
-  ]);
+    const [count, list] = await Promise.all([
+      col.countDocuments(filter),
+      col.find(filter)
+        .sort({ updated: -1 })
+        .skip(skip)
+        .limit(limit)
+        .project({
+          _id: 0,
+          title: 1,
+          title_slug: 1,
+          category: 1,
+          show: 1,
+          unique_id: 1,
+          inserted: 1,
+          updated: 1,
+        })
+        .toArray(),
+    ]);
 
-  return { list, count };
+    return { list, count };
+  });
 }
 
 /**
@@ -197,37 +205,39 @@ export async function findRecordsByFilter({ filterKey, skip = 0, limit = 50 } = 
  * @returns {Promise<{list: object[]}>}
  */
 export async function findLatestImportantRecords({ skip = 0, limit = 10 } = {}) {
-  const col = await collection();
+  return withRetry(async () => {
+    const col = await collection();
 
-  const filter = {
-    pendingForm: { $ne: true },
-    $or: [
-      { 'show.jobs': true },
-      { 'show.results': true },
-      { 'show.admitCard': true },
-      { 'show.admission': true },
-      { 'show.answerKey': true },
-    ],
-  };
+    const filter = {
+      pendingForm: { $ne: true },
+      $or: [
+        { 'show.jobs': true },
+        { 'show.results': true },
+        { 'show.admitCard': true },
+        { 'show.admission': true },
+        { 'show.answerKey': true },
+      ],
+    };
 
-  const list = await col.find(filter)
-    .sort({ updated: -1 })
-    .skip(skip)
-    .limit(limit)
-    .project({
-      _id: 0,
-      title: 1,
-      title_slug: 1,
-      category: 1,
-      description: 1,
-      show: 1,
-      unique_id: 1,
-      inserted: 1,
-      updated: 1,
-    })
-    .toArray();
+    const list = await col.find(filter)
+      .sort({ updated: -1 })
+      .skip(skip)
+      .limit(limit)
+      .project({
+        _id: 0,
+        title: 1,
+        title_slug: 1,
+        category: 1,
+        description: 1,
+        show: 1,
+        unique_id: 1,
+        inserted: 1,
+        updated: 1,
+      })
+      .toArray();
 
-  return { list };
+    return { list };
+  });
 }
 
 /**
@@ -237,14 +247,16 @@ export async function findLatestImportantRecords({ skip = 0, limit = 10 } = {}) 
  * @returns {Promise<string[]>} Array of title_slug strings.
  */
 export async function findAllSlugs() {
-  const col = await collection();
+  return withRetry(async () => {
+    const col = await collection();
 
-  const docs = await col.find(
-    { pendingForm: { $ne: true } },
-    { projection: { _id: 0, title_slug: 1 } }
-  ).toArray();
+    const docs = await col.find(
+      { pendingForm: { $ne: true } },
+      { projection: { _id: 0, title_slug: 1 } }
+    ).toArray();
 
-  return docs.map((doc) => doc.title_slug);
+    return docs.map((doc) => doc.title_slug);
+  });
 }
 
 // ─── WRITE QUERIES ─────────────────────────────────────────────────────────────
@@ -254,12 +266,14 @@ export async function findAllSlugs() {
  * @returns {Promise<Array<{title_slug: string, updated: string}>>}
  */
 export async function getAllSitemapNodes() {
-  const col = await collection();
-  const docs = await col
-    .find({ pendingForm: { $ne: true } })
-    .project({ _id: 0, title_slug: 1, updated: 1 })
-    .toArray();
-  return docs;
+  return withRetry(async () => {
+    const col = await collection();
+    const docs = await col
+      .find({ pendingForm: { $ne: true } })
+      .project({ _id: 0, title_slug: 1, updated: 1 })
+      .toArray();
+    return docs;
+  });
 }
 
 /**
